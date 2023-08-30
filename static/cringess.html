@@ -1,0 +1,335 @@
+<html>
+<head>
+    <title>Cringe</title>
+    
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="/static/favicons/favicon-48.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicons/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/favicons/favicon-16.png">
+    <link rel="manifest" href="/static/favicons/manifest.json">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+            font-family: Comic Sans MS, cursive, sans-serif;
+        }
+        h1 {
+            width: 100%;
+            height: 10%;
+            padding: 0;
+            font-size: 20px;
+            letter-spacing: 50;
+            display: flex;
+            flex-direction: column;
+            align-items: center; 
+            justify-content: center; 
+            height: 100vh;
+            animation: bounce 3s infinite alternate;
+            animation: rotateColor 5s linear infinite;
+        }
+        .special {
+            color: white;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            animation: rotateColor 5s linear infinite;
+            animation: spin 5s linear infinite;
+
+        }
+        img {
+            position: absolute;
+            top: 0;
+            justify-content: center;
+            width: 200px;
+            -webkit-transform: scaleY(-1);
+            transform: scaleY(-1);
+        }
+        a {
+            display: block;
+            width: 240px;
+        }
+        .border-control {
+            border: 10px solid #ffff00;
+            border-style: dotted;
+            background-color: #ff0000;
+            margin: 50px;
+            padding: 20px;
+            border-radius: 50px;
+            box-shadow: 20px 20px 20px rgba(0, 0, 0, 0.3);
+            animation: pulseBorder 3s infinite alternate;
+            animation: shake 2s infinite alternate;
+
+        }
+        h1:nth-child(even) {
+            animation: shakeBorder 20s ease-in-out infinite;
+        }
+        h1:nth-child(odd) {
+            animation: bounce 2s infinite alternate;
+        }
+
+        @keyframes shakeBorder {
+            0%, 100% {
+                transform: translateX(0);
+            }
+            25% {
+                transform: translateX(-10px);
+            }
+            75% {
+                transform: translateX(50px);
+            }
+            23% {
+                transform: translateX(-40px);
+            }
+            50% {
+                transform: translateX(10px);
+            }
+        }
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes rotateColor {
+            0% {
+                color: white;
+            }
+            25% {
+                color: magenta;
+            }
+            50% {
+                color: lime;
+            }
+            75% {
+                color: cyan;
+            }
+            100% {
+                color: white;
+            }
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes shake {
+            0%{
+                transform: translateX(0);
+            }
+            50% {
+                transform: translateX(-40px);
+            }
+
+            100% {
+                transform: translateX(40px);
+            }
+        }
+
+        @keyframes pulseBorder {
+            0%{
+                border-width: 10px;
+            }
+            25%{
+                border-width: 50px;
+            }
+            35%{
+                border-width: 1px;
+            }
+            50% {
+                border-width: 20px;
+            }
+            75% {
+                border-width: 5px;
+            }
+            80%{
+                border-width: 60px;
+            }
+
+            100% {
+                border-width: 30px;
+            }
+            
+        }
+    </style>
+    </style>
+
+</head>
+<body>
+    <div class="border-control">
+
+    <div class="special">
+        <!-- <a href="#white"><img id="scrollImage" src="static\images\arrow.gif" alt="arrow" ></a> -->
+
+        <h1 style="background-color:Black;">Hello</h1>
+    </div>
+
+    <h1 style="background:linear-gradient(Black,Navy);">Black</h1>
+    <h1 style="background:linear-gradient(Navy,DarkBlue);">Navy</h1>
+    <h1 style="background:linear-gradient(DarkBlue,MediumBlue);">DarkBlue</h1>
+    <h1 style="background:linear-gradient(MediumBlue,Blue);">MediumBlue</h1>
+    <h1 style="background:linear-gradient(Blue,DarkGreen);">Blue</h1>
+    <h1 style="background:linear-gradient(DarkGreen,Green);">DarkGreen</h1>
+    <h1 style="background:linear-gradient(Green,Teal);">Green</h1>
+    <h1 style="background:linear-gradient(Teal,DarkCyan);">Teal</h1>
+    <h1 style="background:linear-gradient(DarkCyan,DeepSkyBlue);">DarkCyan</h1>
+    <h1 style="background:linear-gradient(DeepSkyBlue,DarkTurquoise);">DeepSkyBlue</h1>
+    <h1 style="background:linear-gradient(DarkTurquoise,MediumSpringGreen);">DarkTurquoise</h1>
+    <h1 style="background:linear-gradient(MediumSpringGreen,Lime);">MediumSpringGreen</h1>
+    <h1 style="background:linear-gradient(Lime,SpringGreen);">Lime</h1>
+    <h1 style="background:linear-gradient(SpringGreen,Aqua);">SpringGreen</h1>
+    <h1 style="background:linear-gradient(Aqua,Cyan);">Aqua</h1>
+    <h1 style="background:linear-gradient(Cyan,MidnightBlue);">Cyan</h1>
+    <h1 style="background:linear-gradient(MidnightBlue,DodgerBlue);">MidnightBlue</h1>
+    <h1 style="background:linear-gradient(DodgerBlue,LightSeaGreen);">DodgerBlue</h1>
+    <h1 style="background:linear-gradient(LightSeaGreen,ForestGreen);">LightSeaGreen</h1>
+    <h1 style="background:linear-gradient(ForestGreen,SeaGreen);">ForestGreen</h1>
+    <h1 style="background:linear-gradient(SeaGreen,DarkSlateGray);">SeaGreen</h1>
+    <h1 style="background:linear-gradient(DarkSlateGray,DarkSlateGrey);">DarkSlateGray</h1>
+    <h1 style="background:linear-gradient(DarkSlateGrey,LimeGreen);">DarkSlateGrey</h1>
+    <h1 style="background:linear-gradient(LimeGreen,MediumSeaGreen);">LimeGreen</h1>
+    <h1 style="background:linear-gradient(MediumSeaGreen,Turquoise);">MediumSeaGreen</h1>
+    <h1 style="background:linear-gradient(Turquoise,RoyalBlue);">Turquoise</h1>
+    <h1 style="background:linear-gradient(RoyalBlue,SteelBlue);">RoyalBlue</h1>
+    <h1 style="background:linear-gradient(SteelBlue,DarkSlateBlue);">SteelBlue</h1>
+    <h1 style="background:linear-gradient(DarkSlateBlue,MediumTurquoise);">DarkSlateBlue</h1>
+    <h1 style="background:linear-gradient(MediumTurquoise,Indigo);">MediumTurquoise</h1>
+    <h1 style="background:linear-gradient(Indigo,DarkOliveGreen);">Indigo</h1>
+    <h1 style="background:linear-gradient(DarkOliveGreen,CadetBlue);">DarkOliveGreen</h1>
+    <h1 style="background:linear-gradient(CadetBlue,CornflowerBlue);">CadetBlue</h1>
+    <h1 style="background:linear-gradient(CornflowerBlue,RebeccaPurple);">CornflowerBlue</h1>
+    <h1 style="background:linear-gradient(RebeccaPurple,MediumAquaMarine);">RebeccaPurple</h1>
+    <h1 style="background:linear-gradient(MediumAquaMarine,DimGray);">MediumAquaMarine</h1>
+    <h1 style="background:linear-gradient(DimGray,DimGrey);">DimGray</h1>
+    <h1 style="background:linear-gradient(DimGrey,SlateBlue);">DimGrey</h1>
+    <h1 style="background:linear-gradient(SlateBlue,OliveDrab);">SlateBlue</h1>
+    <h1 style="background:linear-gradient(OliveDrab,SlateGray);">OliveDrab</h1>
+    <h1 style="background:linear-gradient(SlateGray,SlateGrey);">SlateGray</h1>
+    <h1 style="background:linear-gradient(SlateGrey,LightSlateGray);">SlateGrey</h1>
+    <h1 style="background:linear-gradient(LightSlateGray,LightSlateGrey);">LightSlateGray</h1>
+    <h1 style="background:linear-gradient(LightSlateGrey,MediumSlateBlue);">LightSlateGrey</h1>
+    <h1 style="background:linear-gradient(MediumSlateBlue,LawnGreen);">MediumSlateBlue</h1>
+    <h1 style="background:linear-gradient(LawnGreen,Chartreuse);">LawnGreen</h1>
+    <h1 style="background:linear-gradient(Chartreuse,Aquamarine);">Chartreuse</h1>
+    <h1 style="background:linear-gradient(Aquamarine,Maroon);">Aquamarine</h1>
+    <h1 style="background:linear-gradient(Maroon,Purple);">Maroon</h1>
+    <h1 style="background:linear-gradient(Purple,Olive);">Purple</h1>
+    <h1 style="background:linear-gradient(Olive,Gray);">Olive</h1>
+    <h1 style="background:linear-gradient(Gray,Grey);">Gray</h1>
+    <h1 style="background:linear-gradient(Grey,SkyBlue);">Grey</h1>
+    <h1 style="background:linear-gradient(SkyBlue,LightSkyBlue);">SkyBlue</h1>
+    <h1 style="background:linear-gradient(LightSkyBlue,BlueViolet);">LightSkyBlue</h1>
+    <h1 style="background:linear-gradient(BlueViolet,DarkRed);">BlueViolet</h1>
+    <h1 style="background:linear-gradient(DarkRed,DarkMagenta);">DarkRed</h1>
+    <h1 style="background:linear-gradient(DarkMagenta,SaddleBrown);">DarkMagenta</h1>
+    <h1 style="background:linear-gradient(SaddleBrown,DarkSeaGreen);">SaddleBrown</h1>
+    <h1 style="background:linear-gradient(DarkSeaGreen,LightGreen);">DarkSeaGreen</h1>
+    <h1 style="background:linear-gradient(LightGreen,MediumPurple);">LightGreen</h1>
+    <h1 style="background:linear-gradient(MediumPurple,DarkViolet);">MediumPurple</h1>
+    <h1 style="background:linear-gradient(DarkViolet,PaleGreen);">DarkViolet</h1>
+    <h1 style="background:linear-gradient(PaleGreen,DarkOrchid);">PaleGreen</h1>
+    <h1 style="background:linear-gradient(DarkOrchid,YellowGreen);">DarkOrchid</h1>
+    <h1 style="background:linear-gradient(YellowGreen,Sienna);">YellowGreen</h1>
+    <h1 style="background:linear-gradient(Sienna,Brown);">Sienna</h1>
+    <h1 style="background:linear-gradient(Brown,DarkGray);">Brown</h1>
+    <h1 style="background:linear-gradient(DarkGray,DarkGrey);">DarkGray</h1>
+    <h1 style="background:linear-gradient(DarkGrey,LightBlue);">DarkGrey</h1>
+    <h1 style="background:linear-gradient(LightBlue,GreenYellow);">LightBlue</h1>
+    <h1 style="background:linear-gradient(GreenYellow,PaleTurquoise);">GreenYellow</h1>
+    <h1 style="background:linear-gradient(PaleTurquoise,LightSteelBlue);">PaleTurquoise</h1>
+    <h1 style="background:linear-gradient(LightSteelBlue,PowderBlue);">LightSteelBlue</h1>
+    <h1 style="background:linear-gradient(PowderBlue,FireBrick);">PowderBlue</h1>
+    <h1 style="background:linear-gradient(FireBrick,DarkGoldenRod);">FireBrick</h1>
+    <h1 style="background:linear-gradient(DarkGoldenRod,MediumOrchid);">DarkGoldenRod</h1>
+    <h1 style="background:linear-gradient(MediumOrchid,RosyBrown);">MediumOrchid</h1>
+    <h1 style="background:linear-gradient(RosyBrown,DarkKhaki);">RosyBrown</h1>
+    <h1 style="background:linear-gradient(DarkKhaki,Silver);">DarkKhaki</h1>
+    <h1 style="background:linear-gradient(Silver,MediumVioletRed);">Silver</h1>
+    <h1 style="background:linear-gradient(MediumVioletRed,IndianRed);">MediumVioletRed</h1>
+    <h1 style="background:linear-gradient(IndianRed,Peru);">IndianRed</h1>
+    <h1 style="background:linear-gradient(Peru,Chocolate);">Peru</h1>
+    <h1 style="background:linear-gradient(Chocolate,Tan);">Chocolate</h1>
+    <h1 style="background:linear-gradient(Tan,LightGray);">Tan</h1>
+    <h1 style="background:linear-gradient(LightGray,LightGrey);">LightGray</h1>
+    <h1 style="background:linear-gradient(LightGrey,Thistle);">LightGrey</h1>
+    <h1 style="background:linear-gradient(Thistle,Orchid);">Thistle</h1>
+    <h1 style="background:linear-gradient(Orchid,GoldenRod);">Orchid</h1>
+    <h1 style="background:linear-gradient(GoldenRod,PaleVioletRed);">GoldenRod</h1>
+    <h1 style="background:linear-gradient(PaleVioletRed,Crimson);">PaleVioletRed</h1>
+    <h1 style="background:linear-gradient(Crimson,Gainsboro);">Crimson</h1>
+    <h1 style="background:linear-gradient(Gainsboro,Plum);">Gainsboro</h1>
+    <h1 style="background:linear-gradient(Plum,BurlyWood);">Plum</h1>
+    <h1 style="background:linear-gradient(BurlyWood,LightCyan);">BurlyWood</h1>
+    <h1 style="background:linear-gradient(LightCyan,Lavender);">LightCyan</h1>
+    <h1 style="background:linear-gradient(Lavender,DarkSalmon);">Lavender</h1>
+    <h1 style="background:linear-gradient(DarkSalmon,Violet);">DarkSalmon</h1>
+    <h1 style="background:linear-gradient(Violet,PaleGoldenRod);">Violet</h1>
+    <h1 style="background:linear-gradient(PaleGoldenRod,LightCoral);">PaleGoldenRod</h1>
+    <h1 style="background:linear-gradient(LightCoral,Khaki);">LightCoral</h1>
+    <h1 style="background:linear-gradient(Khaki,AliceBlue);">Khaki</h1>
+    <h1 style="background:linear-gradient(AliceBlue,HoneyDew);">AliceBlue</h1>
+    <h1 style="background:linear-gradient(HoneyDew,Azure);">HoneyDew</h1>
+    <h1 style="background:linear-gradient(Azure,SandyBrown);">Azure</h1>
+    <h1 style="background:linear-gradient(SandyBrown,Wheat);">SandyBrown</h1>
+    <h1 style="background:linear-gradient(Wheat,Beige);">Wheat</h1>
+    <h1 style="background:linear-gradient(Beige,WhiteSmoke);">Beige</h1>
+    <h1 style="background:linear-gradient(WhiteSmoke,MintCream);">WhiteSmoke</h1>
+    <h1 style="background:linear-gradient(MintCream,GhostWhite);">MintCream</h1>
+    <h1 style="background:linear-gradient(GhostWhite,Salmon);">GhostWhite</h1>
+    <h1 style="background:linear-gradient(Salmon,AntiqueWhite);">Salmon</h1>
+    <h1 style="background:linear-gradient(AntiqueWhite,Linen);">AntiqueWhite</h1>
+    <h1 style="background:linear-gradient(Linen,LightGoldenRodYellow);">Linen</h1>
+    <h1 style="background:linear-gradient(LightGoldenRodYellow,OldLace);">LightGoldenRodYellow</h1>
+    <h1 style="background:linear-gradient(OldLace,Red);">OldLace</h1>
+    <h1 style="background:linear-gradient(Red,Fuchsia);">Red</h1>
+    <h1 style="background:linear-gradient(Fuchsia,Magenta);">Fuchsia</h1>
+    <h1 style="background:linear-gradient(Magenta,DeepPink);">Magenta</h1>
+    <h1 style="background:linear-gradient(DeepPink,OrangeRed);">DeepPink</h1>
+    <h1 style="background:linear-gradient(OrangeRed,Tomato);">OrangeRed</h1>
+    <h1 style="background:linear-gradient(Tomato,HotPink);">Tomato</h1>
+    <h1 style="background:linear-gradient(HotPink,Coral);">HotPink</h1>
+    <h1 style="background:linear-gradient(Coral,DarkOrange);">Coral</h1>
+    <h1 style="background:linear-gradient(DarkOrange,LightSalmon);">DarkOrange</h1>
+    <h1 style="background:linear-gradient(LightSalmon,Orange);">LightSalmon</h1>
+    <h1 style="background:linear-gradient(Orange,LightPink);">Orange</h1>
+    <h1 style="background:linear-gradient(LightPink,Pink);">LightPink</h1>
+    <h1 style="background:linear-gradient(Pink,Gold);">Pink</h1>
+    <h1 style="background:linear-gradient(Gold,PeachPuff);">Gold</h1>
+    <h1 style="background:linear-gradient(PeachPuff,NavajoWhite);">PeachPuff</h1>
+    <h1 style="background:linear-gradient(NavajoWhite,Moccasin);">NavajoWhite</h1>
+    <h1 style="background:linear-gradient(Moccasin,Bisque);">Moccasin</h1>
+    <h1 style="background:linear-gradient(Bisque,MistyRose);">Bisque</h1>
+    <h1 style="background:linear-gradient(MistyRose,BlanchedAlmond);">MistyRose</h1>
+    <h1 style="background:linear-gradient(BlanchedAlmond,PapayaWhip);">BlanchedAlmond</h1>
+    <h1 style="background:linear-gradient(PapayaWhip,LavenderBlush);">PapayaWhip</h1>
+    <h1 style="background:linear-gradient(LavenderBlush,SeaShell);">LavenderBlush</h1>
+    <h1 style="background:linear-gradient(SeaShell,Cornsilk);">SeaShell</h1>
+    <h1 style="background:linear-gradient(Cornsilk,LemonChiffon);">Cornsilk</h1>
+    <h1 style="background:linear-gradient(LemonChiffon,FloralWhite);">LemonChiffon</h1>
+    <h1 style="background:linear-gradient(FloralWhite,Snow);">FloralWhite</h1>
+    <h1 style="background:linear-gradient(Snow,Yellow);">Snow</h1>
+    <h1 style="background:linear-gradient(Yellow,LightYellow);">Yellow</h1>
+    <h1 style="background:linear-gradient(LightYellow,Ivory);">LightYellow</h1>
+    <h1 style="background:linear-gradient(Ivory,White);">Ivory</h1>
+    <h1 id="white" style="background-color:White;">White</h1>
+
+
+        <h1 style="background-color: white;">hello</h1>
+    </div>
+
+</body>
+</html>

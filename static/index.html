@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Parker's Portfolio</title>
+    <style>
+        @font-face {
+            font-family: 'Obrazec';
+            src: url('static/Obrazec 2.woff');
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            color: #fff;
+            background: #111;
+        }
+
+        .background {
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            position: fixed;
+            top: 0;
+            object-fit: cover;
+            opacity: 0.5; /* Adjust the opacity for a subtle effect */
+        }
+        .hero-container {
+            text-align: center;
+            margin-top: -50px; /* Adjust as needed */
+        }
+        .hero {
+            font-family: 'Obrazec', sans-serif;
+            font-size: 3rem;
+            color: #00ffcc; /* Try a complementary color */
+        }
+        .hero span {
+            display: block;
+            color: #fff;
+        }
+
+
+
+        .small_container{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 50%;
+            height: 50%;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #fff;
+        }
+
+        .scroll-container {
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            height: 100vh;        
+        }
+
+        .container {
+            display: flex;
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            height: 100vh;
+            scroll-snap-align: start;
+            border-bottom: 1px solid #fff;
+        }
+        .container h1 {
+            text-decoration: none;
+            color: #ccc;
+            font-size: 10rem;
+            transition: color 0.3s ease;
+            display: flex;
+        }
+        .container a {
+            text-decoration: none;
+            color: #ccc;
+            font-size: 2rem;
+            margin-top: 20px;
+            transition: color 0.3s ease; 
+        }
+
+    </style>
+    <link rel="stylesheet" href="static/styles/glitch_style.css">
+</head>
+<body>
+    <div class="scroll-container">
+    <div class="container">
+        <img class="background" src="static/images/retro_gif.gif" alt="retro gif of girl on motorcycle">
+        <div class="hero-container">
+            <h2 class="hero glitch layers" data-text="Parker's Portfolio">
+                <span>Parker's Portfolio</span>
+            </h2>
+        </div>
+    </div>
+    <div class="container">
+        <h1>01</h1><a href="./bio">Biosite - 8/22/23</a>
+    </div>
+    <div class="container">
+        <h1>02</h1><a href="./cringe">CringeSS - 8/29/23</a>
+    </div>
+    </div>
+</body>
+</html>

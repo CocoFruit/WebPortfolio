@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Biography</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            display: flex;
+            flex-direction: column;
+            /* justify-content: center; */
+            align-items: center;
+            height: 100vh;
+            overflow: hidden; /* Disable scrolling */
+
+        }
+        .banner {
+            background-color: #b917a6;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            width: 100%;
+            position: relative;
+        }
+
+        .banner-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 10px;
+        }
+
+        .banner-button {
+            padding: 8px 16px;
+            background-color: #950c7f;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 16px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .banner-button:hover, .banner-button.active {
+            background-color: #7d0a67;
+        }
+
+        .container {
+            max-width: 800px;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            text-align: center;
+            padding: 20px;
+            color: #ffffff;
+            text-decoration: none; 
+            font-weight: bold;
+        }
+        p {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-top: 10px;
+            color: #333;
+        }
+        .profile-pic {
+            /* display: block; */
+            width: 100%;
+            height: 400px; /* Set the desired fixed height */
+            /* object-fit: cover; */
+            /* object-position: 90% 10%; */
+            /* box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2); */
+        }
+    </style>
+</head>
+<body>
+    <div class="banner">
+        <h1>Who Am I?</h1>
+        <div class="banner-buttons">
+            <a class="banner-button active" href="bio">Bio</a>
+            <a class="banner-button" href="schedule">Schedule</a>
+            <a class="banner-button" href="favorites">Favorites</a>
+        </div>
+    </div>
+    
+    <div class="container">
+        <p>Hello there, I'm Parker – a passionate senior at ASMSA, exploring the captivating realm of computer science. With an insatiable curiosity and an unyielding love for Python, I'm navigating the dynamic landscape of coding creativity.</p>
+    </div>
+    <img class="profile-pic" src="static\images\mePic.jpeg" alt="Parker">
+</body>
+</html>

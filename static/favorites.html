@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Favorites</title>
+    <style>
+        body {
+            background-color: #f3f3f3;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .banner {
+            background-color: #b917a6;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            position: relative;
+        }
+
+        .banner-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 10px;
+        }
+
+        .banner-button {
+            padding: 8px 16px;
+            background-color: #950c7f;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 16px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .banner-button:hover, .banner-button.active {
+            background-color: #7d0a67;
+        }
+
+        h1 {
+            text-align: center;
+            padding: 20px;
+            color: #ffffff;
+            text-decoration: none; 
+            font-weight: bold;
+        }
+
+        ul {
+            list-style-position: inside;
+            padding-left: 0;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 50vh;
+            padding: 20px;
+        }
+
+        .box {
+            position: relative;
+            width: 32%;
+            height: 200px;
+            border: 1px solid black;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            border-radius: 10px; 
+            overflow: hidden; 
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;  
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+        .coola {
+            position: relative;
+            z-index: 2; 
+            color: white; 
+            background-color: #b917a6;
+            padding: 5px 10px; 
+            text-decoration: none; 
+            border-radius: 4px; 
+            font-weight: bold; 
+        }
+        .coola:hover {
+            background-color: #950c7f;
+        }
+    </style>
+</head>
+<body>
+    <div class="banner">
+        <h1>Welcome to My Favorite Links</h1>
+        <div class="banner-buttons">
+            <a class="banner-button" href="bio">Bio</a>
+            <a class="banner-button" href="schedule">Schedule</a>
+            <a class="banner-button active" href="favorites">Favorites</a>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="box">
+            <a href="/static/images/kernelPic.png">
+                <img src="/static/images/kernelPic.png" alt="Kernel Wiki Pic">
+            </a>
+            <a class="coola" href="https://en.wikipedia.org/wiki/Kernel_(image_processing)">Kernel Wiki</a>
+        </div>
+        
+        <div class="box">
+            <a href="/static/images/stackOverflow.png">
+                <img src="/static/images/StackoverFlow Pic.png" alt="Stack Overflow Pic">
+            </a>
+            <a class="coola" href="https://stackoverflow.com/">Stack Overflow</a>
+        </div>
+        
+        <div class="box">
+            <a href="/static/images/tictactoe.png">
+                <img src="/static/images/tictactoe.png" alt="Tic Tac Toe Pic">
+            </a>
+            <a class="coola" href="https://github.com/asweigart/my_first_tic_tac_toe/blob/master/generate_code_for_tictactoe.py">Tic Tac Toe</a>
+        </div>
+    </div>
+</body>
+</html>
