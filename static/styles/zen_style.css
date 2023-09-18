@@ -1,0 +1,287 @@
+/* css Zen Garden default style v1.02 */
+/* css released under Creative Commons License - http://creativecommons.org/licenses/by-nc-sa/1.0/  */
+
+/* This file based on 'Tranquille' by Dave Shea */
+/* You may use this file as a foundation for any new work, but you may find it easier to start from scratch. */
+/* Not all elements are defined in this file, so you'll most likely want to refer to the xhtml as well. */
+
+/* Your images should be linked as if the CSS file sits in the same folder as the images. ie. no paths. */
+
+
+/* basic elements */
+html {
+	margin: 0;
+	padding: 0;
+	}
+
+body { 
+	font: 75% georgia, sans-serif;
+	line-height: 1.88889;
+	color: #555753; 
+	background: #fff url(../images/space_gif.gif); 
+	margin: 0; 
+	padding: 0;
+
+    position: relative; /* Set the body's position to relative */
+	}
+p { 
+	margin-top: 0; 
+	text-align: justify;
+	}
+
+header[role="banner"] {
+    text-align: center;
+    margin: 0 auto;
+    padding: 0;
+}
+
+header h1{
+    margin-top: 40vh;
+    margin-bottom: 0;
+    display: flex;
+    letter-spacing: 2px;
+    width: 100%;
+    color: #ffffff;
+}
+header h2{
+    margin: 0 auto;
+    margin-bottom: 50vh;
+    display: inline-block;
+    letter-spacing: 6px;
+    width: 100%;
+    color: #ffffff;
+}
+h1 {
+    font: normal 5em georgia, sans-serif;
+    letter-spacing: -2px; 
+    margin: 0 0 0 0; 
+    padding: 0; 
+    color: #ffffff;
+    }
+h3 { 
+	font: italic normal 1.4em georgia, sans-serif;
+	letter-spacing: 1px; 
+	margin-bottom: 0; 
+	color: #7D775C;
+	}
+section{
+    margin-top: 0;
+    margin-bottom: 0;
+    display: flex;
+    flex-direction: column;
+    letter-spacing: 2px;
+    width: 100%;
+    height: 100vh;
+    color: #ffffff;
+}
+
+.summary {
+    letter-spacing: 1px;
+    position: absolute;
+    top: 80vh;
+    right: 10vh;
+    max-width: 300px;
+    max-height: 200px;
+  }
+.preamble {
+    letter-spacing: 1px;
+    position: absolute;
+    top: 120vh;
+    left: 20vh;
+    max-width: 300px;
+    background-color: rgb(0,50,100,0.5);
+    padding: 0 10px 0 10px;
+    border-radius: 10px;
+}
+.main.supporting{
+    margin-bottom: 200vh;
+}
+.main.supporting div{
+    background-color: rgb(0,50,100,0.5);
+    position: absolute;
+    letter-spacing: 1px;
+    padding: 0 10px 0 10px;
+    border-radius: 10px;
+    color: #ffffff;
+}
+.explanation{
+    letter-spacing: 1px;
+    position: absolute;
+    top: 150vh;
+    right: 20vh;
+    max-width: 300px;
+}
+.participation{
+    letter-spacing: 1px;
+    position: absolute;
+    top: 200vh;
+    left: 50vh;
+    max-width: 300px;
+}
+.benefits{
+    letter-spacing: 1px;
+    position: absolute;
+    top: 230vh;
+    right: 10vh;
+    max-width: 300px;
+}
+.requirements{
+    letter-spacing: 1px;
+    position: absolute;
+    top: 300vh;
+    left: 10vh;
+    max-width: 700px;
+}
+.extra1 {
+    width: 160px;
+    height: 160px;
+    background-color: orange;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: -2;
+}
+.extra2 {
+    width: 350px;
+    height: 350px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+    border: 1px dashed #ffffff;
+    border-radius: 50%;
+    background: transparent;
+    
+}
+.extra3{
+    content: "";
+    width: 30px;
+    height: 30px;
+    background-color: #3498db;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%; 
+    transform: translate(-50%, -50%);
+    z-index: -1;
+    animation: followCircle 5s linear infinite; /* Adjust duration as needed */
+}
+@keyframes followCircle {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg) translateY(175px); /* Adjust translateY for the desired radius */
+    }
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg) translateY(175px); /* Adjust translateY for the desired radius */
+    }
+}
+
+.design-selection{
+    letter-spacing: 1px;
+    position: absolute;
+    top: 280vh;
+    right: 0vh;
+    max-width: 300px;
+    background-color: rgb(0,50,100,0.5);
+    padding: 0 10px 0 10px;
+    border-radius: 10px;
+    font: 1.2em georgia, sans-serif;
+
+}
+.archives{
+    font: 0em georgia, sans-serif;
+}
+.select{
+    font: 0em georgia, sans-serif;
+}
+.design-archives{
+    letter-spacing: 1px;
+    position: absolute;
+    top: 120vh;
+    right: 0vh;
+    max-width: 300px;
+    background-color: rgb(0,50,100,0.5);
+    padding: 0 10px 0 10px;
+    border-radius: 10px;
+    font: 1.2em georgia, sans-serif;
+
+}
+.zen-resources{
+    letter-spacing: 1px;
+    position: absolute;
+    top: 210vh;
+    left: 0vh;
+    max-width: 300px;
+    background-color: rgb(0,50,100,0.5);
+    padding: 0 10px 0 10px;
+    border-radius: 10px;
+    font: 1.2em georgia, sans-serif;
+}
+.resources{
+    font: 0em georgia, sans-serif;
+}
+ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+li{
+    padding: 20px 0;
+    border-bottom: 1px solid rgb(200,100,200,0.5);
+}
+li:last-child{
+    border-bottom: none;
+}
+
+a{
+    color: #ffffff;
+    text-decoration: none;
+}
+a:link { 
+	font-weight: bold; 
+	text-decoration: none; 
+	color: #B7A5DF;
+	}
+a:hover, a:focus, a:active { 
+	text-decoration: underline; 
+	color: #9685BA;
+	}
+abbr {
+	border-bottom: none;
+	}
+
+/* specific divs */
+.page-wrapper { 
+	padding: 0 0 0 0;  
+	margin: 0; 
+	position: relative;
+	}
+
+footer {
+clear: both;
+text-align: center;
+position: relative;
+width: 100%;
+top: 300vh;
+font: 3em georgia, sans-serif;
+display: flex; /* Use flexbox */
+align-items: center; /* Vertically center the content */
+justify-content: center; 
+}
+
+footer a {
+  display: inline-block;
+  overflow: hidden;
+  height: 40px;
+  padding: 10px 0 10px 0;
+  margin: 0 0.5em;
+  position: relative;
+  -webkit-transition: color 0.25s ease-out, box-shadow 0.25s ease-out;
+  -moz-transition: color 0.25s ease-out, box-shadow 0.25s ease-out;
+  transition: color 0.25s ease-out, box-shadow 0.25s ease-out;
+}
+footer a:hover, footer a:focus {
+  text-decoration: none;
+}

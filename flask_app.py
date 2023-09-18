@@ -23,6 +23,10 @@ def schedule():
 def cringe():
     return send_from_directory('static', 'cringess.html')
 
+@app.route('/zen')
+def zen():
+    return send_from_directory('static', 'zen.html')
+
 
 if __name__=="__main__":
     app.run(host='0.0.0.0',port=80)
