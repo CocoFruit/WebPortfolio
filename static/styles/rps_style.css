@@ -1,0 +1,74 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f2f2f2;
+}
+
+.game-container {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.hands {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.player-hand, .computer-hand {
+    width: 150px;
+    height: 150px;
+    overflow: hidden;
+}
+
+.player-hand img, .computer-hand img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.choices {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.choice {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.result {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.player-hand img, .computer-hand img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    animation: bounce 1.5s ease-in-out;
+    animation-fill-mode: both;
+    display: none; /* Initially hide the images */
+}

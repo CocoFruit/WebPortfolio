@@ -27,5 +27,14 @@ def cringe():
 def zen():
     return send_from_directory('static', 'zen.html')
 
+'''
+app.route('/quiz')
+def quiz():
+    quiz = {"title":"title","1":{"option1":"option1","option2":"option2"}}
+    if request.method == "GET" and "quiz" in request.args:
+        return render_tempalte(f"form.html",previtem=previtems,question=quiz[request.args["quiz"]])
+    return render_template("form.html",question=quiz["1"])
+'''
+
 if __name__=="__main__":
     app.run(host='0.0.0.0',port=80)
