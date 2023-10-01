@@ -64,7 +64,7 @@ def quiz():
             # Randomly select a mascot for this session
             session["mascot"] = random.choice(mascots)
 
-            session["image"] = f"static/images/{session['mascot'].lower()}.webp"
+            session["image"] = f"static/images/{session['mascot'].lower().replace(' ','')}.webp"
             return render_template('finalmsg.html', **session)
         return render_template(f'form{num+1}.html',**request.args)
     return render_template('form1.html')
