@@ -1,10 +1,19 @@
 from flask import Flask
 from flask import *
 import random
-
+from flask import Flask, jsonify, render_template, request, redirect, url_for
+import firebase_admin
+from firebase_admin import credentials, firestore
+import html
 
 app = Flask(__name__)
 app.secret_key = 'key'
+
+# Firebase setup
+cred = credentials.Certificate(r"C:\Users\parke\Downloads\vote_example\vote_example\creds.json")  # Replace with the path to your Firebase Admin SDK key
+firebase_admin.initialize_app(cred)
+db = firestore.client()
+
 
 @app.route('/')
 def index():
@@ -68,6 +77,38 @@ def quiz():
             return render_template('finalmsg.html', **session)
         return render_template(f'form{num+1}.html',**request.args)
     return render_template('form1.html')
+
+@app.route('/wouldyourather')
+def wouldyourather():
+    return render_template('wouldyourather.html')
+
+
+@app.route('/vote', methods=['GET'])
+def vote():
+    votes_ref = db.collection('votes')
+    question = request.args.get('question')
+    option = request.args.get('option')
+    
+    # Update the vote count for the selected option in Firestore
+    vote_doc = votes_ref.document(question)   
+
+    # if the document doesn't exist, create it
+    if not vote_doc.get().exists:
+        vote_doc.set({option: 0})
+
+    vote_data = vote_doc.get()
+    vote_data_dict = vote_data.to_dict()
+
+    if vote_data.exists:
+        vote_count = vote_data_dict.get(option, 0) + 1
+    else:
+        vote_count = 1
+        
+    
+    vote_data_dict[option] = vote_count
+    vote_doc.set(vote_data_dict)
+    
+    return jsonify(vote_data_dict)
 
 if __name__=="__main__":
     app.run(host='0.0.0.0',port=80)

@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+        .clickable-container {
+            display: flex;
+            width: 100%;
+        }
+        .clickable-area {
+            width: 50%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #left-area {
+            background-color: #3498db;
+        }
+
+        #right-area {
+            background-color: #e74c3c;
+        }
+
+        .clickable-area a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 40px;
+            font-weight: bold;
+        }
+
+        #left-area:hover {
+            background-color: #2980b9;
+        }
+
+        #right-area:hover {
+            background-color: #c0392b;
+        }
+        .question {
+            position: absolute;
+            top: 5%; /* Adjust this value to change the vertical position */
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            font-size: 35px;
+            font-weight: bold;
+            color: white;
+            border-radius: 25px;
+            background: rgba(200, 0, 200, 0.25);
+            padding: 10px;
+        }
+
+        .cirlce{
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background-color: black;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            text-align: center;
+            color:white;
+            font-size: 40px;
+            font-weight: bold;
+            transform: translate(-50%, -50%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .arrow-down {
+            position: fixed;
+            bottom: 10px; /* Adjust this value to change the vertical position */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 100px solid transparent;
+            border-right: 100px solid transparent;
+                -webkit-filter: drop-shadow(0px 0px 3px rgba(0, 0, 0, 0.7));
+                filter: drop-shadow(0px 0px 3px rgba(0, 0, 0, 0.7));
+            border-top: 40px solid rgb(251, 243, 243); /* Change the color of the arrow as needed */
+            z-index: 9999; /* Set a high z-index value to ensure it's on top of everything else */
+        }
+        .arrow-down:hover {
+            border-top: 40px solid rgb(224, 216, 216); /* Change the color of the arrow as needed */
+            cursor: pointer;
+            -webkit-filter: drop-shadow(0px 0px 6px rgba(0, 0, 0, 0.7));
+            filter: drop-shadow(0px 0px 6px rgba(0, 0, 0, 0.7));
+        }
+        .container {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            scroll-snap-align: start;
+            border-bottom: 1px solid #fff;
+            opacity: 0;
+            flex: 1;
+            transform: translateY(0);
+            transition: transform 2s;
+        }
+
+        .container.current {
+            display: flex;
+            opacity: 1;
+            transform: translateX(0);
+        }
+        @keyframes scrollDown {
+            from {
+                transform: translateY(0);
+            }
+            to {
+                transform: translateY(-100%);
+            }
+            }
+        .questions-container {
+            overflow: hidden;
+            height: 100vh; /* Set the desired height to match the viewport */
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="questions-container">
+    <div class="container current" data-question-index="0" id="eat">
+        <div class="clickable-container">
+            <div class="clickable-area" id="left-area">
+                <a id="left-link" option="fried worms">
+                    Fried Worms
+                </a>
+            </div>
+            <div class="clickable-area" id="right-area">
+                <a id="right-link" option="raw egg">
+                    A Raw Egg
+                </a>
+            </div>
+        </div>
+        <div class="question">
+            <p>Would you rather eat</p>
+        </div>
+        <div class="cirlce">
+            <canvas class='using' id="myPieChart" width="400" height="400"></canvas>
+        </div>
+    </div>
+    <div class="container" data-question-index="1" id="printer">
+        <div class="clickable-container">
+            <div class="clickable-area" id="left-area">
+                <a id="left-link" option="3D">
+                    A 3D Printer
+                </a>
+            </div>
+            <div class="clickable-area" id="right-area">
+                <a id="right-link" option="resin">
+                    A Resin Printer
+                </a>
+            </div>
+        </div>
+        <div class="question">
+            <p>Would you rather have</p>
+        </div>
+        <div class="cirlce">
+            <canvas class='not-using' id="myPieChart" width="400" height="400"></canvas>
+        </div>
+    </div>
+    </div>
+<script> 
+    let number_of_questions = document.querySelectorAll('.container').length;
+    let currIndex = document.querySelector('.container.current');;
+    function voteOption(question, option) {
+        // Check if the user has already voted by looking for a cookie
+        if (document.cookie.includes(`${question}=voted`)) {
+            // User has already voted, handle accordingly (e.g., show a message)
+            alert('You have already voted for this question.');
+            return;
+        }
+        fetch(`/vote?question=${question}&option=${option}`)
+            .then(response => response.json())
+            .then(data => {  
+                document.cookie = `${question}=voted`;
+                clicked = true;  
+                data = reverseOrderOfDictionary(data);
+                console.log(data)
+                createPieChart(data);
+                updatePercentages(data);
+                if (number_of_questions > parseInt(currIndex.getAttribute('data-question-index')) + 1){
+                    allowNextQuestion();
+                }
+                else{
+                    disAllowNextQuestion();
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+    function goToNextQuestion() {
+        const currentQuestion = document.querySelector('.container.current');
+        const questionIndex = parseInt(currentQuestion.getAttribute('data-question-index'));
+        const nextQuestionIndex = questionIndex + 1;
+        const nextQuestion = document.querySelector(`.container[data-question-index="${nextQuestionIndex}"]`);
+
+        if (nextQuestion) {
+            currIndex = nextQuestion;
+            nextQuestion.classList.add('current');
+            document.querySelector('.questions-container').scrollTo({
+                top: nextQuestion.offsetTop,
+                behavior: 'smooth',
+            });        
+
+            // find the left-area and right-area of the next question
+            let leftArea = nextQuestion.querySelector('#left-area');
+            let rightArea = nextQuestion.querySelector('#right-area');
+            
+            let question = nextQuestion.id;
+
+            // add event listeners to the left-area and right-area of the next question
+            leftArea.addEventListener('click', function () {
+                let option = nextQuestion.querySelector('#left-link').getAttribute('option');
+                voteOption(question, option);
+            });
+            rightArea.addEventListener('click', function () {
+                let option = nextQuestion.querySelector('#right-link').getAttribute('option');
+                voteOption(question, option);
+            });
+
+            // destroy canvas of last question
+            let canvas = document.querySelector('.using');
+            canvas.remove();
+
+            // change not using canvas to using canvas
+            let notUsingCanvas = document.querySelector('.not-using');
+            notUsingCanvas.classList.remove('not-using');
+            notUsingCanvas.classList.add('using');
+
+            if (number_of_questions > parseInt(currIndex.getAttribute('data-question-index')) + 1){
+                    allowNextQuestion();
+                }
+            else{
+                disAllowNextQuestion();
+            }
+
+        } else {
+            // Handle the end of questions or loop back to the first question if desired.
+            // You can customize this behavior based on your requirements.
+        }
+    }
+
+    function disAllowNextQuestion(){
+        try{
+            document.getElementById('arrow-down').remove();
+        }
+        catch(err){
+            // do nothing
+        }
+    }
+    function allowNextQuestion(){
+        // Create a new div element
+        var divElement = document.createElement("div");
+
+        // Add the "arrow-down" class to the div
+        divElement.className = "arrow-down";
+        divElement.id = "arrow-down";
+        // Append the div to the document body or any other desired location
+        document.body.appendChild(divElement);
+
+        document.getElementById('arrow-down').addEventListener('click', function () {
+            goToNextQuestion();
+        });
+    }
+    function reverseOrderOfDictionary(dictionary) {
+        const reversedArray = Object.entries(dictionary).reverse();
+        const reversedDictionary = Object.fromEntries(reversedArray);
+        return reversedDictionary;
+    }
+    function updatePercentages(data) {
+        const totalVotes = Object.values(data).reduce((a, b) => a + b, 0);
+        const percentages = {};
+        for (const option in data) {
+            percentages[option] = ((data[option] / totalVotes) * 100).toFixed(2) + '%';
+        } 
+        let option1 = currIndex.querySelector('#left-link').getAttribute('option');
+        let option2 = currIndex.querySelector('#right-link').getAttribute('option');
+
+        currIndex.querySelector('#left-link').textContent = `${option1} (${percentages[option1]})`;
+        currIndex.querySelector('#right-link').textContent = `${option2} (${percentages[option2]})`;
+        // let option1 = document.getElementById('left-link').getAttribute('option');
+        // let option2 = document.getElementById('right-link').getAttribute('option');
+
+        // document.getElementById('left-link').textContent = `${option1} (${percentages[option1]})`;
+        // document.getElementById('right-link').textContent = `${option2} (${percentages[option2]})`;
+    }
+
+    function createPieChart(data) {
+        const canvas = document.getElementById('myPieChart');
+        const ctx = canvas.getContext('2d');
+
+        const values = Object.values(data);
+        const labels = Object.keys(data);
+
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        data: values,
+                        backgroundColor: ['rgb(255, 99, 132)','rgb(54, 162, 235)'],
+                    },
+                ],
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        display: false,
+                    },
+                    tooltips: {
+                        enabled: false,
+                    },
+                },
+            },
+        });
+
+    }
+
+    // Add event listeners to the links
+    document.getElementById('left-area').addEventListener('click', function () {
+        let question = document.querySelector('.container.current').getAttribute('id');
+        let option = document.getElementById('left-link').getAttribute('option');
+        voteOption(question, option);
+    });
+
+    document.getElementById('right-area').addEventListener('click', function () {
+        let question = document.querySelector('.container.current').getAttribute('id');
+        let option = document.getElementById('right-link').getAttribute('option');
+        voteOption(question, option);
+    });
+
+
+</script>
+</body>
+</html>
