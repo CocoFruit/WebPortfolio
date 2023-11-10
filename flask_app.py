@@ -4,7 +4,6 @@ import random
 from flask import Flask, jsonify, render_template, request, redirect, url_for
 import firebase_admin
 from firebase_admin import credentials, firestore
-import html
 
 app = Flask(__name__)
 app.secret_key = 'key'
