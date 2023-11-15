@@ -113,13 +113,13 @@ def vote():
 @app.route('/list')
 def todolist():
     docs = db.collection('todo_list').stream()
-    output=[]
+    output = []
     for doc in docs:
-        doc_dict=doc.to_dict()
-        doc_dict["_id"]=doc.id
+        doc_dict = doc.to_dict()
+        doc_dict["_id"] = doc.id
         output.append(doc_dict)
- 
-    return output
+
+    return jsonify(output)
     
 @app.route('/toggle/<doc_id>')
 def toggle(doc_id):
