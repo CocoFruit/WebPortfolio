@@ -148,7 +148,7 @@ def delete_item(doc_id):
 
 @app.route('/todo')
 def todo():
-    return render_template('list.html')
+    return send_from_directory('static','list.html')
 
 if __name__=="__main__":
     app.run(host='0.0.0.0',port=80)
