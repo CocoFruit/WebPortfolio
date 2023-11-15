@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Super-Duper Hacker Login</title>
+  <style>
+body {
+  background-color: #000;
+  color: #00ff00; /* Green text color */
+  font-family: 'Courier New', Courier, monospace;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.login-container {
+  background-color: #000;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center; /* Center the text content inside the container */
+}
+
+.input-group {
+  margin-bottom: 20px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.loading-container {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  height: 100px;
+  background-color: rgba(0, 0, 0, 0.8);
+  justify-content: center;
+  align-items: center;
+  color: #00ff00;
+  font-size: 24px;
+  z-index: 1000;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border: 2px solid #00ff00;
+}
+
+    .loading-text {
+      margin-top: 20px;
+    }
+label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+input {
+  width: 300px; /* Make the input take the full width of the container */
+  box-sizing: border-box; /* Include padding and border in the width */
+  padding: 8px;
+  margin-top: 4px;
+  border: 1px solid #00ff00;
+  border-radius: 4px;
+  background-color: #000;
+  color: #00ff00;
+  text-align: center;
+  outline: none;
+}
+.box{
+  width: 30px;
+}
+
+button {
+  background-color: #001f3f;
+  color: #00ff00;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+canvas {
+      display: none;
+      border: 2px solid #00ff00;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h2>Super-Duper-Secure-Secret-Hacker Login</h2>
+    <div class="input-group">
+      <div id="hint-container-username"></div> 
+      <label for="username">Username</label>
+      <input type="text" id="username" placeholder="Enter your username">
+    </div>
+    <div class="input-group">
+      <div id="hint-container-pin"></div> 
+      <label for="pin">PIN</label>
+      <div id="pin-container" class="pin-container"></div>
+    </div>
+    <button>Login</button>
+    <div class="loading-container" id="loading-container">
+      <div class="loading-text">Logging in</div>
+    </div>
+  </div>
+
+  <script>
+    function showGameScreen() {
+      // Hide login container
+      document.querySelector('.login-container').style.display = 'none';
+
+      // Show canvas
+      document.getElementById('gameCanvas').style.display = 'block';
+
+      // Perform any additional setup for your game here
+    }
+
+
+// when the page loads, focus on the username input
+    document.getElementById('username').focus();
+
+    // create pin input
+    const pinContainer = document.getElementById('pin-container');
+    const pinInputs = [];
+
+    for (let i = 0; i < 6; i++) {
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.maxLength = 1;
+      input.addEventListener('input', handlePinInput);
+      input.classList.add('box');
+      pinContainer.appendChild(input);
+
+      pinInputs.push(input);
+    }
+
+    // when the user clicks the login button, log the username and pin
+    document.querySelector('button').addEventListener('click', () => {
+      const username = document.getElementById('username').value;
+      const pin = pinInputs.map(input => input.value).join('');
+      console.log(pin)
+      checkCreds(username, pin);
+    });
+
+    function handlePinInput() {
+      const currentIndex = pinInputs.findIndex(input => input === document.activeElement);
+
+      if (event.inputType === 'deleteContentBackward' && currentIndex > 0) {
+        // Handle backspace, move focus back one box
+        pinInputs[currentIndex - 1].focus();
+      } else if (currentIndex < pinInputs.length - 1 && this.value !== '') {
+        // Move focus to the next box if not at the end
+        pinInputs[currentIndex + 1].focus();
+      }
+    }
+
+    document.addEventListener('keydown', function (event) {
+      const currentIndex = pinInputs.findIndex(input => input === document.activeElement);
+
+      if (event.key === 'ArrowLeft' && currentIndex > 0 && getCaretPosition(pinInputs[currentIndex]) === 0) {
+        // Move focus to the previous box if left arrow key is pressed at the beginning of the current box
+        pinInputs[currentIndex - 1].focus();
+      }
+      if (event.key == 'ArrowRight' && currentIndex < 6) {
+        // Move focus to the next box if right arrow key is pressed at the end of the current box
+        pinInputs[currentIndex + 1].focus();
+      }
+      
+    });
+
+    // Function to get the caret position in an input field
+    function getCaretPosition(input) {
+      return input.selectionStart;
+    }
+    function checkCreds(user, pass) {
+      // change user to lower case
+      user = user.toLowerCase();
+
+      let showHints = false; // Variable to determine if hints should be displayed
+      let hintContainer = document.getElementById('hint-container-username');
+      if (user !== 'maya' && hintContainer.childElementCount < 1) {
+        const hintUsername = document.createElement('div');
+        hintUsername.className = 'hint';
+        hintUsername.textContent = 'Hint: The username is the name of the most beautiful person on this earth';
+        hintContainer.appendChild(hintUsername);
+      }
+
+      hintContainer = document.getElementById('hint-container-pin');
+      if (pass !== '112122' && hintContainer.childElementCount < 1) {
+        const hitnPin = document.createElement('div');
+        hitnPin.className = 'hint';
+        hitnPin.textContent = 'Hint: The pin is the day something special happened';
+        hintContainer.appendChild(hitnPin);        
+      }
+    }
+    document.querySelector('button').addEventListener('click', () => {
+      const username = document.getElementById('username').value;
+      const pin = pinInputs.map(input => input.value).join('');
+      console.log(pin);
+
+      // Show loading animation
+      showLoading();
+
+      // Simulate an asynchronous login process (replace this with your actual login logic)
+      setTimeout(() => {
+        checkCreds(username, pin);
+
+        // Hide loading animation after checking credentials
+        hideLoading();
+        showGameScreen();
+      }, 5000); // Simulating a 2-second delay, replace with actual login logic time
+      
+    });
+
+    function showLoading() {
+      document.getElementById('loading-container').style.display = 'flex';
+      // get the loading text element
+      const loadingText = document.querySelector('.loading-text');
+      loadingText.textContent = 'Logging in';
+      // create a dot for every second that passes
+      let dots = '';
+      const interval = setInterval(() => {
+        if (dots.length === 3) {
+          dots = '';
+        }else{
+        dots += '.';
+        }
+        loadingText.textContent = `Logging in${dots}`;
+      }, 450);
+    }
+
+    function hideLoading() {
+      document.getElementById('loading-container').style.display = 'none';
+    }
+  </script>
+</body>
+</html>

@@ -13,7 +13,6 @@ cred = credentials.Certificate(r"C:\Users\parke\Downloads\vote_example\vote_exam
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 
-
 @app.route('/')
 def index():
     return send_from_directory('static', 'index.html')
@@ -81,6 +80,9 @@ def quiz():
 def wouldyourather():
     return render_template('wouldyourather.html')
 
+@app.route('/maya')
+def maya():
+    return send_from_directory('static','flowers.html')
 
 @app.route('/vote', methods=['GET'])
 def vote():
@@ -102,12 +104,51 @@ def vote():
         vote_count = vote_data_dict.get(option, 0) + 1
     else:
         vote_count = 1
-        
     
     vote_data_dict[option] = vote_count
     vote_doc.set(vote_data_dict)
     
     return jsonify(vote_data_dict)
+
+@app.route('/list')
+def todolist():
+    docs = db.collection('todo_list').stream()
+    output=[]
+    for doc in docs:
+        doc_dict=doc.to_dict()
+        doc_dict["_id"]=doc.id
+        output.append(doc_dict)
+ 
+    return output
+    
+@app.route('/toggle/<doc_id>')
+def toggle(doc_id):
+    docref = db.collection('todo_list').document(doc_id)
+    doc = docref.get()
+    if doc.exists:
+        is_complete = doc.to_dict().get('is_complete', False)
+        docref.update({"is_complete": not is_complete})
+    return ""
+
+@app.route('/add', methods=['GET'])
+def add_item():
+    if "item" in request.args:
+        item=request.args["item"]
+        db.collection('todo_list').add({
+            'item': item,
+            'is_complete': False,
+            'timestamp': firestore.SERVER_TIMESTAMP
+        })
+    return ""
+
+@app.route('/delete/<doc_id>', methods=['GET'])
+def delete_item(doc_id):
+    db.collection('todo_list').document(doc_id).delete()
+    return ""
+
+@app.route('/todo')
+def todo():
+    return render_template('list.html')
 
 if __name__=="__main__":
     app.run(host='0.0.0.0',port=80)

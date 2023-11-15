@@ -1,0 +1,66 @@
+
+body {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: var(--dark-color);
+    overflow: hidden;
+    perspective: 1000px;
+    background-color: #2c3e50; /* Dark background color, you can change this */
+    color: #ecf0f1; /* Light text color, you can change this */
+    font-family: Arial, sans-serif; /* Optional: Set a font-family for your text */
+}
+
+.flower{
+    position: relative;
+}
+
+
+.flower__leaf{
+    position: absolute;
+    left: 50%;
+    bottom: 2vmin;
+    transform: translateX(-50%);
+    width: 5vmin;
+    height: 14vmin;
+    background-image: linear-gradient(to bottom, #ffa085 ,#fa7373, #1a233a 99%);
+
+    clip-path: ellipse(50% 50% at 50% 50%);
+    transform-origin: center bottom;
+    animation: open-flower 2s 1s backwards;
+}
+
+.flower__leaf--basic{
+    width: 10vmin;
+    height: 12vmin;
+    bottom: 50vmin;
+    border-radius: 50% 50% 50% 50% / 80% 80% 20% 20%;
+    background-color: #e24f5f;
+    background-image: linear-gradient(to bottom, #e24f5f, #f4a261, #e9c46a);
+}
+
+.stem {
+    width: 8px;
+    height: 100px;
+    background-color: #795548;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.stem::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 8px;
+    height: 80px;
+    background-color: #795548;
+    border-radius: 0 0 50% 50%;
+    transform: translateX(-50%);
+    border: 3px solid #795548;
+    border-top: none;
+    border-bottom: none;
+}

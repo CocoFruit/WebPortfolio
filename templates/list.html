@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task List</title>
+    <link href="https://fonts.cdnfonts.com/css/handwriting" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            font-family: 'Handwriting', sans-serif;
+            font-size: 300%;
+        }
+
+        h2 {
+            color: #666;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #fff;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            font-family: 'Handwriting', sans-serif;
+            font-size: 200%;
+        }
+
+        li label {
+            margin-left: 10px;
+        }
+
+        .inputText {
+            display: flex;
+            align-items: center;
+            font-family: 'Handwriting', sans-serif;
+            font-size: 200%;
+        }
+
+        .unchecked-box {
+            display: inline-block;
+            height: 35px;
+            width: 50px;
+            margin-right: 10px;
+            margin-left: 3px;
+        }
+
+        input[type="text"] {
+            padding: 8px;
+            margin-right: 5px;
+            border: none;
+            font-size: 16px;
+            flex-grow: 1;
+            outline: none;
+            font-family: 'Handwriting', sans-serif;
+            font-size: 100%;
+        }
+
+        .inputText input[type="button"] {
+            padding: 8px;
+            background-color: rgb(0, 153, 255, 0.7);
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Handwriting', sans-serif;
+            font-size: 80%; /* Adjust the font size */
+            transition: background-color 0.3s ease-in-out; /* Add transition for smooth effect */
+        }
+
+        .inputText input[type="button"]:hover {
+            background-color: rgb(0, 153, 255, 1);
+        }
+
+        input[type="checkbox"] {
+            margin-right: 5px;
+        }
+
+        img {
+            display: none;
+            height: 20px;
+        }
+
+        label:hover > img {
+            display: inline;
+        }
+
+        .delete-icon {
+            cursor: pointer;
+            margin-left: 10px;
+            transition: background-image 0.3s ease-in-out; /* Add transition for smooth effect */
+        }
+
+        .delete-icon:hover {
+            background-image: url(/static/images/open-trash.png);
+        }
+
+        hr{
+            border: 0;
+            height: 1px;
+            background: #333;
+            background-image: linear-gradient(to right, #ccc, #333, #ccc);
+            display:none;
+        }
+    </style>
+    <script>
+        function add(name) {
+            const url = '/add?item=' + encodeURIComponent(name);
+
+            fetch(url, {
+                method: 'GET',
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return Promise.reject('Failed to add item');
+                }
+                update();
+                return;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        function deleteItem(id){
+            const url = `/delete/${id}`;
+
+            fetch(url, {
+                method: 'GET',
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return Promise.reject('Failed to delete item');
+                }
+                update();
+                return;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        function update() {
+            var xhr = new XMLHttpRequest();
+
+
+            
+            xhr.open('GET', '/list', true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var data = JSON.parse(xhr.responseText);
+
+                    var completedList = document.getElementById('completed-list');
+                    var notCompletedList = document.getElementById('not-completed-list');
+                    completedList.innerHTML = "";
+                    notCompletedList.innerHTML = "";
+
+                    for (let i = 0; i < data.length; i++) {
+                        let label = document.createElement('label');
+                        label.textContent = data[i].item;
+
+                        let checkbox = document.createElement('input');
+                        checkbox.type = 'checkbox';
+                        checkbox.style.appearance = 'none';
+                        checkbox.style.width = '50px';  // Set the width of the checkbox
+                        checkbox.style.height = '35px'; // Set the height of the checkbox
+                        checkbox.style.backgroundImage = 'url(/static/images/unchecked_box.png)'; // Set the background image URL
+                        checkbox.style.backgroundSize = 'cover'; // Adjust the background size as needed
+
+                        let temp = data[i]._id;
+                        checkbox.onclick = function() { toggle(temp); };
+
+                        let img = document.createElement('img');
+                        img.src = '/static/images/closed-trash.png';
+                        img.alt = 'closed trash can';
+                        img.className = 'delete-icon';
+                        // add a little margin to the image
+                        img.style.marginBottom = '1px';
+                        img.onclick = function() { deleteItem(data[i]._id); };
+
+                        label.textContent = data[i].item;
+                        label.appendChild(img);
+
+                        let listItem = document.createElement('li');
+                        listItem.appendChild(checkbox);
+                        listItem.appendChild(label);
+
+                        if (data[i].is_complete) {
+                            checkbox.checked = true;
+                            checkbox.style.backgroundImage = 'url(/static/images/checked_box.png)'; // Set the background image URL for checked state
+                            completedList.appendChild(listItem);
+                            if(completedList.hasChildNodes()){
+                                document.getElementById("seperating-line").style.display = "block";
+                            } else {
+                                document.getElementById("seperating-line").style.display = "none";
+                            }
+                        } else {
+                            checkbox.style.backgroundImage = 'url(/static/images/unchecked_box.png)'; // Set the background image URL for unchecked state
+                            notCompletedList.appendChild(listItem);
+                        }
+                    }
+                    const deleteIcons = document.querySelectorAll('.delete-icon');
+
+
+                }
+            };
+            xhr.send();
+        }
+
+        function process() {
+            let elem = document.getElementById('task_name');
+            add(elem.value);
+            elem.value = "";
+        }
+
+        function toggle(id) {
+            const url = `/toggle/${id}`;
+
+            fetch(url, {
+                method: 'GET',
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return Promise.reject('Failed to toggle item');
+                }
+                update();
+                return;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>To Do List</h1>
+
+
+    <li class="inputText">
+        <img class="unchecked-box" src="/static/images/unchecked_box.png" alt="Unchecked Box">
+        <input type="text" id="task_name" placeholder="New Task" />
+        <input type="button" value="Add" onclick="process();" />
+    </li>
+
+    <!-- <h2>Not Completed</h2> -->
+    <ul id="not-completed-list">
+
+    </ul>
+
+    <hr id="seperating-line">
+
+    <!-- <h2>Completed</h2> -->
+    <ul id="completed-list"></ul>
+
+    <script>
+        update();
+    </script>
+</body>
+</html>
