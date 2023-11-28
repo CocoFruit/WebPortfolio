@@ -150,5 +150,9 @@ def delete_item(doc_id):
 def todo():
     return send_from_directory('static','list.html')
 
+@app.route('/weather')
+def weather():
+    return send_from_directory('static','weather.html')
+
 if __name__=="__main__":
     app.run(host='0.0.0.0',port=80)

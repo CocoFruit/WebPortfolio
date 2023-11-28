@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Roboto+Mono:wght@500&family=Roboto:wght@100&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/weather-icons.min.css">
+    <style>
+        body {
+            font-family: 'Roboto Mono', sans-serif;
+            text-align: center;
+            font-weight: 1000;
+            margin: 0;
+            overflow: hidden; /* Prevent body overflow */
+            background-image: url('static/images/green-background.jpg');
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            margin: 0 20px;
+        }
+        .row2 {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .temperature-container,
+        .extra-data-container,
+        .forecast-container {
+            position: relative;
+            /* border: 1px solid #ccc; */
+            padding: 20px;
+            border-radius: 25px;
+            box-shadow: 0 10px 8px rgba(0, 0, 0, 0.1), 8px 8px 8px 8px rgba(0, 0, 0, 0.1);
+            background-size: cover;
+            color: rgb(226, 224, 224);
+        }
+
+
+        #location {
+            position: absolute;
+            left: 10px;
+            font-size: 1.2em;
+            margin-top: 5px;
+        }
+
+        #temperature {
+            position: absolute;
+            left: 10px;
+            bottom: 0px;
+            font-size: 7em;
+            margin-top: 5px;
+            margin-bottom: 0;
+        }
+
+        #time {
+            position: absolute; /* Set position to absolute */
+            bottom: 25px; /* Adjusted distance from the bottom */
+            right: 10px; /* Adjusted distance from the right */
+            font-size: 3em;
+        }
+
+        #date {
+            position: absolute; /* Set position to absolute */
+            bottom: 5px; /* Adjusted distance from the bottom */
+            right: 10px; /* Adjusted distance from the right */
+            font-size: 1.5em;
+        }
+
+        .temperature-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 210px;
+            top: 20px;
+            background-image: url('static/images/forest.jpg');
+        }
+
+        .extra-data-container,
+        .forecast-container {
+            flex: 1; /* Make these containers flex to take up equal width */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            margin-top: 20px;
+            color: darkgreen;
+        }
+
+        .extra-data-container {
+            height: 200px;
+            background: linear-gradient(135deg, #f5d7dc, #e3e1eb); /* Replace with your desired colors */
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            font-size: 1.6em;
+            margin-right: 10px;
+        }
+        .forecast-container {
+            height: 200px;
+            background: linear-gradient(135deg, #f5d7dc, #e3e1eb); /* Replace with your desired colors */
+            display: flex;
+            flex-direction: row;
+            grid-template-columns: repeat(5, 1fr);
+            font-size: 1.6em;
+            margin-left: 10px;
+        }
+
+        .fday{
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background: linear-gradient(135deg, #f5d7dc, #e3e1eb); /* Replace with your desired colors */
+            font-size: 1.3em;
+            font-weight: 100;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+
+        }
+
+        .v-line {
+            border-right: 1px solid #ccc; 
+        }
+
+        .extra-data {
+            display: flex;
+            align-items: center;
+            justify-content: center; 
+            flex-direction: row;
+        }
+
+        i {
+            margin-right: 10px;
+        }
+
+        .icon {
+            font-size: 1.5em;
+        }
+        .icon2 {
+            margin: 0px;
+        }
+        .data-data{
+            margin: 0;
+            padding: 0;
+            text-align: left;
+
+        }
+        p{
+            margin: 0;
+            padding: 0;
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="container">
+    <div class="temperature-container">
+        <div id="temperature">53°</div>
+        <div id="location">Hot Springs, Arkansas</div>
+        <div id="time">12:34 PM</div>
+        <div id="date">Monday, January 1, 2021</div>
+    </div>
+    <div class="row2">
+    <div class="extra-data-container">
+        <div class="extra-data" id="humidity">
+            <i class="wi wi-humidity icon"></i>
+            <div class="data-data">
+                <p>Humidity</p>
+                <p>50%</p>
+            </div>
+            <!-- Include humidity data here -->
+        </div>
+
+        <div class="extra-data" id="sunrise">
+            <i class="wi wi-sunrise icon"></i>
+            <div class="data-data">
+                <p>Sunrise</p>
+                <p>3:30am</p>
+            </div>
+        </div>
+
+        <div class="extra-data" id="uv">
+            <i class="wi wi-day-sunny icon"></i>
+            <div class="data-data">
+                <p>UV Index</p>
+                <p>5 of 10</p>
+            </div>
+        </div>
+
+        <div class="extra-data" id="sunset">
+            <i class="wi wi-sunset icon"></i>
+            <div class="data-data">
+                <p>Sunset</p>
+                <p>8:30pm</p>
+            </div>
+        </div>
+    </div>
+    <div class="forecast-container">
+        <div class="fday">
+            MON
+            <i class="wi wi-day-sunny icon2"></i>
+        </div>
+        <div class="v-line"></div>
+        <div class="fday">
+            TUE
+            <i class="wi wi-day-sunny icon2"></i>
+        </div>
+        <div class="v-line"></div>
+        <div class="fday">
+            WED
+            <i class="wi wi-day-sunny icon2"></i>
+        </div>
+        <div class="v-line"></div>
+        <div class="fday">
+            THU
+            <i class="wi wi-day-sunny icon2"></i>
+        </div>
+        <div class="v-line"></div>
+        <div class="fday">
+            FRI
+            <i class="wi wi-day-sunny icon2"></i>
+        </div>
+        <div class="v-line"></div>
+        <div class="fday">
+            SAT
+            <i class="wi wi-day-sunny icon2"></i>
+        </div>
+        <div class="v-line"></div>
+        <div class="fday">
+            SUN
+            <i class="wi wi-day-sunny icon2"></i>
+        </div>
+    </div>
+    </div>
+    </div>
+    <script>
+        apiInfo = {
+        "gridId": "LZK",
+        "gridX": 54,
+        "gridY": 61,
+        "forecast": "https://api.weather.gov/gridpoints/LZK/54,61/forecast",
+        "forecastHourly": "https://api.weather.gov/gridpoints/LZK/54,61/forecast/hourly",
+        "forecastGridData": "https://api.weather.gov/gridpoints/LZK/54,61"
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const data = getForecastData();
+
+        });
+        function getForecastData() {
+            fetch(apiInfo.forecast)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    return data;
+                });
+            }
+        function renderExtraData(data){
+            const extraDataContainer = document.getElementsByClassName('extra-data-container')[0];
+        }
+        function renderForecastData(forecastData) {
+                const forecastContainer = document.getElementsByClassName('forecast-container')[0];
+
+                forecastData.properties.periods.forEach(period => {
+                    const forecastDay = document.createElement('div');
+                    forecastDay.classList.add('forecast-day');
+
+                    // const forecastIcon = document.createElement('img');
+                    // forecastIcon.src = period.icon;
+                    // forecastIcon.alt = period.shortForecast;
+                    // forecastIcon.classList.add('forecast-icon');
+
+                    const forecastDetails = document.createElement('div');
+                    forecastDetails.innerHTML = `
+                        <p>${period.name}</p>
+                        <p>${period.shortForecast}</p>
+                        <p>Temperature: ${period.temperature}°F</p>
+                        <p>Humidity: ${period.relativeHumidity.value}%</p>
+                        <p>Wind: ${period.windSpeed} ${period.windDirection}</p>
+                    `;
+
+                    // forecastDay.appendChild(forecastIcon);
+                    forecastDay.appendChild(forecastDetails);
+
+                    forecastContainer.appendChild(forecastDay);
+                });
+            }
+    </script>
+</body>
+</html>
