@@ -154,5 +154,9 @@ def todo():
 def weather():
     return send_from_directory('static','weather.html')
 
+@app.route('/boggle')
+def boggle():
+    return send_from_directory('static','boggle.html')
+
 if __name__=="__main__":
     app.run(host='0.0.0.0',port=80)

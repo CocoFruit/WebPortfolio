@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Boggle</title>
+    <link href='https://fonts.googleapis.com/css?family=Varela Round' rel='stylesheet'>
+    <style>
+        body{
+            background-color: #ddd;
+        }
+        h1{
+            text-align: center;
+            font-family: 'Varela Round';
+            margin: 10px 10px;
+        }
+        .board {
+            display: grid;
+            grid-template-columns: repeat(4, 75px);
+            grid-gap: 15px;
+            border-radius: 1%;
+            user-select: none;
+            padding-top: 100px;
+        }
+        .cell {
+            width: 75px;
+            height: 75px;
+            background-color: #bbb;
+            display: flex; /* Use flexbox to center content */
+            justify-content: center; /* Horizontally center content */
+            align-items: center; /* Vertically center content */
+            border-radius: 20%;
+            font-family: 'Varela Round';
+            font-size: 30px;
+            font-weight: bold;
+            color: #fff;
+        }
+        .container{
+            width: 100%;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+
+        #wordCounter {
+            padding-top: 30px;
+            font-size: 18px;
+            line-height: 1.5;
+            max-width: 300px;
+            font-family: 'Varela Round';
+        }
+
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Boggle</h1>
+        <div class="board" id="boggleBoard"></div>
+        <div id="wordCounter">Words Found: 0</div>
+    </div>
+
+</body>
+<script>
+    // create the board when the page loads
+    window.onload = createBoard;
+
+    let foundWords = [];
+    const BOARD_SIZE = 4;
+    const LETTERS = [
+    ['A', 'E', 'A', 'N', 'E', 'G'],
+    ['A', 'H', 'S', 'P', 'C', 'O'],
+    ['A', 'S', 'P', 'F', 'F', 'K'],
+    ['O', 'B', 'J', 'O', 'A', 'B'],
+    ['I', 'O', 'T', 'M', 'U', 'C'],
+    ['R', 'Y', 'V', 'D', 'E', 'L'],
+    ['L', 'R', 'E', 'I', 'X', 'D'],
+    ['E', 'I', 'U', 'N', 'E', 'S'],
+    ['W', 'N', 'G', 'E', 'E', 'H'],
+    ['L', 'N', 'H', 'N', 'R', 'Z'],
+    ['T', 'S', 'T', 'I', 'Y', 'D'],
+    ['O', 'W', 'T', 'O', 'A', 'T'],
+    ['E', 'R', 'T', 'T', 'Y', 'L'],
+    ['T', 'O', 'E', 'S', 'S', 'I'],
+    ['T', 'E', 'R', 'W', 'H', 'V'],
+    ['N', 'U', 'I', 'H', 'M', 'QU']
+    ];
+
+    let validWords = [];  // Array to store valid words
+
+    // Load the boggleDict.txt file
+    fetch('/static/boggleDict.txt')
+        .then(response => response.text())
+        .then(data => {
+            // Split the content into an array of words
+            validWords = data.split('\n').map(word => word.trim().toUpperCase());
+        })
+        .catch(error => console.error('Error loading boggleDict.txt:', error));
+
+    function isValidWord(word) {
+        return validWords.includes(word.toUpperCase());
+    }
+
+    currentWord = [];
+
+    let isDragging = false;
+
+    document.addEventListener("mousedown", function () {
+        isDragging = true;
+    });
+
+    document.addEventListener("mouseup", function () {
+        isDragging = false;
+        validateAndReset();
+    });
+
+    function sleep (time) {
+        return new Promise((resolve) => setTimeout(resolve, time));
+    }
+
+    
+    function validateCurrentWord() {
+        const word = currentWord.map(entry => entry[0]).join('');
+        if (isValidWord(word) && !foundWords.includes(word)) {
+            alert(`Valid word: ${word}`);
+            if(!foundWords.includes(word)){
+                foundWords.push(word);
+                document.getElementById("wordCounter").innerHTML = "Words Found: " + foundWords.length;
+            }
+        } else {
+            alert(`Invalid word: ${word}`);
+        }
+    }
+
+    function validateAndReset() {
+        validateCurrentWord();
+        for (var i = 0; i < currentWord.length; i++) {
+            coord = currentWord[i];
+            x = coord[1];
+            y = coord[2];
+            document.getElementById(x + "," + y).style.backgroundColor = "#bbb";
+        }
+        currentWord = [];
+    }
+
+    function randomizeBoard(diceList = LETTERS) {
+        const diceIndices = Array.from({ length: diceList.length }, (_, i) => i);
+        shuffleArray(diceIndices);
+
+        const board = [];
+        for (let i = 0; i < BOARD_SIZE; i++) {
+            const row = [];
+            for (let j = 0; j < BOARD_SIZE; j++) {
+            const die = diceList[diceIndices.pop()];
+            const letter = die[Math.floor(Math.random() * die.length)];
+            row.push(letter);
+            }
+            board.push(row);
+        }
+
+        return board;
+    }
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+
+    function createBoard() {
+        var board = document.getElementById("boggleBoard");
+        var boardSize = 4;
+        x = 0;
+        y = 0;
+        boardArray = randomizeBoard();
+        for (var i = 0; i < boardSize * boardSize; i++) {
+            x = i % boardSize;
+            y = Math.floor(i / boardSize);
+            var cell = document.createElement("div");
+            cell.className = "cell";
+            cell.innerHTML = boardArray[y][x];
+            cell.id = x +","+ y;
+            board.appendChild(cell);
+        }
+        
+    document.addEventListener("mousemove", function (event) {
+        if (isDragging) {
+            const element = document.elementFromPoint(event.clientX, event.clientY);
+            if (element && element.className === "cell") {
+                const coord = element.id.split(",");
+                x = parseInt(coord[0]);
+                y = parseInt(coord[1]);
+                for(var i = 0; i < currentWord.length; i++){
+                        if(currentWord[i][1] == x && currentWord[i][2] == y){
+                            // this.style.backgroundColor = "#bbb";
+                            // for (var j = i; j < currentWord.length; j++) {
+                            //     coord = currentWord[j];
+                            //     x = coord[1];
+                            //     y = coord[2];
+                            //     document.getElementById(x +","+ y).style.backgroundColor = "#bbb";
+                            // }
+                            // currentWord.splice(i, currentWord.length - i);
+                            return;
+                        }
+                    }
+                if (currentWord.length > 0) {
+                    const lastCoord = currentWord[currentWord.length - 1];
+                    const lastX = lastCoord[1];
+                    const lastY = lastCoord[2];
+
+                    if (Math.abs(x - lastX) <= 1 && Math.abs(y - lastY) <= 1) {
+                        currentWord.push([element.innerHTML, x, y]);
+                        element.style.backgroundColor = "#00FF00";
+                    }
+                } else {
+                    currentWord.push([element.innerHTML, x, y]);
+                    element.style.backgroundColor = "#00FF00";
+                }
+            }
+        }
+    });
+    }
+
+
+
+</script>
+</html>

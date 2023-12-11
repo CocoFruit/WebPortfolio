@@ -33,6 +33,22 @@ Y:	[2,	4],
 Z:	[1,10],
 BLANK:	[2,	0]
 };
+let selectedPlayerTile = null;
+
+function highlightPlayerTile(playerTileCol) {
+    // Deselect the previously selected tile if any
+    if (selectedPlayerTile !== null) {
+        const deselectedTile = document.getElementById(`playerTile-${selectedPlayerTile}`);
+        deselectedTile.classList.remove("selected");
+    }
+
+    // Highlight the newly selected tile
+    const selectedTile = document.getElementById(`playerTile-${playerTileCol}`);
+    selectedTile.classList.add("selected");
+
+    // Update the selectedPlayerTile variable
+    selectedPlayerTile = playerTileCol;
+} 
 
 function sleep(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms));
@@ -52,14 +68,8 @@ function placeTile(letter, row, col, playerTileCol=None) {
 	cell.classList.add("cell");
 	cell.classList.add("letter");
 	cell.textContent = letter;3
-	cell.draggable = true;
 
-	cell.addEventListener('dragover', handleDragOver);
-	cell.addEventListener('dragenter', handleDragEnter);
-	cell.addEventListener('dragleave', handleDragLeave);
-	cell.addEventListener('drop', handleDrop);
-	cell.addEventListener('dragstart', handleDragStart);
-	cell.addEventListener('dragend', handleDragEnd);
+	tempPlacedTiles.push([row, col, playerTileCol, letter])
 
 	// remove the letter from the player's bag
 	playerBag[playerTileCol] = undefined;
@@ -71,50 +81,90 @@ function placeTile(letter, row, col, playerTileCol=None) {
 function refillPlayerBag(playerBag) {
 	for (let i = 0; i < 7; i++) {
 		if(playerBag[i] == undefined){
-			playerBag[i]=getRandomLetter()
+			// playerBag[i]=getRandomLetter()
+			playerBag[i] = "A"; // for testing
 			const cell = document.getElementById(`playerTile-${i}`);
+			cell.addEventListener("click", function (event) {
+				// Check if the click happened on a player tile
+				if (event.target.classList.contains("playerCell")) {
+					// Get the column of the clicked player tile
+					const playerTileCol = parseInt(event.target.id.split("-")[1], 10);
+		
+					// Highlight the selected player tile
+					highlightPlayerTile(playerTileCol);
+				}
+			});
 			cell.classList.add("big_letter");
 			cell.textContent = playerBag[i];
 		}
 	}
 }
+function allLettersConnected(tempPlacedTiles){
+	// check if all letters are conne
+	for(let i = 0; i < tempPlacedTiles.length; i++){
+		if (i == 0){
+			continue;
+		}
+		if (tempPlacedTiles[i][0] == tempPlacedTiles[i-1][0]){
+			if (tempPlacedTiles[i][1] != tempPlacedTiles[i-1][1]+1 && tempPlacedTiles[i][1] != tempPlacedTiles[i-1][1]-1){
+				return false;
+			}
+		}
+		else if (tempPlacedTiles[i][1] == tempPlacedTiles[i-1][1]){
+			if (tempPlacedTiles[i][0] != tempPlacedTiles[i-1][0]+1 && tempPlacedTiles[i][0] != tempPlacedTiles[i-1][0]-1){
+				return false;
+			}
+		}
+		else{
+			return false;
+		}
+	}
+	return true;
+}
 
-function handleDragStart(e) {
-	this.style.opacity = '0.4';
+function submitWord() {
+	if (tempPlacedTiles.length === 0) {
+	  alert("Please place tiles on the board before submitting a word.");
+	  return;
+	}
+	// make sure starting tile is used
 
-	dragSrcEl = this;
-
-	e.dataTransfer.effectAllowed = 'move';
-	e.dataTransfer.setData('text/html', this.innerHTML);
-
-  }
+	for(let i = 0; i < tempPlacedTiles.length; i++){
+		if(full_grid[tempPlacedTiles[i][0]][tempPlacedTiles[i][1]] == "start"){
+			break;
+		}
+		if(i == tempPlacedTiles.length-1){
+			if (full_grid[7][7] != "start"){
+				break;
+			}
+			alert("Please place a tile on the starting tile.");
+			return;
+		}
+	
+	}
+	
+	// make sure all letters are connected
+	if (!allLettersConnected(tempPlacedTiles)){
+		alert("The letters you placed are not all connected.");
+		return;
+	}
+	// viable = isWordViable("AAA", tempPlacedTiles);
+	// if (!viable) {
+	// 	alert("Please place tiles on the board in a valid way.");
+	// 	return;
+	// }
+	// Your word submission logic here
+	// const wordTiles = tempPlacedTiles.map(tile => playerBag[tile[2]]);
   
-function handleDragEnd(e) {
-	this.style.opacity = '1';
+	// For example, you can display an alert with the selexcted tiles
+	// alert(`Submitted Word: ${wordTiles.join('')}`);
+  
+	// Clear the temporary placed tiles
+	// tempPlacedTiles = [];
+  
+	// Optionally, refill the player's bag after submitting the word
+	// refillPlayerBag(playerBag);
   }
-
-
-function handleDragOver(e) {
-e.preventDefault();
-return false;
-}
-
-function handleDragEnter(e) {
-this.classList.add('over');
-}
-
-function handleDragLeave(e) {
-this.classList.remove('over');
-}
-
-function handleDrop(e) {
-	e.stopPropagation(); // stops the browser from redirecting.
-	this.innerHTML = e.dataTransfer.getData('text/html');
-	this.classList.remove('over');
-	tileCol = dragSrcEl.id.split("-")[1]
-	placeTile(this.textContent, this.id.split("-")[1], this.id.split("-")[2],tileCol)
-	return false;	
-}
 
 function setup(){
 	specials = {
@@ -127,7 +177,7 @@ function setup(){
 
 	full_grid = []
 	playerBag = [undefined, undefined, undefined, undefined, undefined, undefined, undefined]
-
+	tempPlacedTiles = []
 	// Get the "scrabbleBoard" div element
 	const boardContainer = document.getElementById("scrabbleBoard");
 
@@ -142,11 +192,30 @@ function setup(){
 			full_grid[row].push(0)
 			const cell = document.createElement("div");
 			cell.classList.add("cell");
+			cell.addEventListener("click", function (event) {
+				// Check if the click happened on a board cell
+				if (event.target.classList.contains("cell")) {
+					// Get the row and column of the clicked cell
+					const [row, col] = event.target.id.split("-").slice(1).map(Number);
+		
+					// make sure selected tile isnt selected player tile not in already placed
+					if (selectedPlayerTile === null){
+						return;
+					}
+					for (let i = 0; i < tempPlacedTiles.length; i++) {
+						if (tempPlacedTiles[i][2] == selectedPlayerTile){
+							return;
+						}
+					}
+					// Place the selected tile on the board
+					placeTile(playerBag[selectedPlayerTile], row, col, selectedPlayerTile);
+					
+					// disallow the player from clicking on the tile again
+					const playerTile = document.getElementById(`playerTile-${selectedPlayerTile}`);
+					playerTile.classList.remove("selected");
+				}
+			});
 			cell.id = `cell-${row}-${col}`;
-			cell.addEventListener('dragover', handleDragOver);
-			cell.addEventListener('dragenter', handleDragEnter);
-			cell.addEventListener('dragleave', handleDragLeave);
-			cell.addEventListener('drop', handleDrop);
 			grid.appendChild(cell);
 		}
 	}
@@ -187,9 +256,6 @@ function setup(){
 		const cell = document.createElement("div");
 		cell.classList.add("playerCell");
 		cell.id = `playerTile-${col}`;
-		cell.draggable = true;
-		cell.addEventListener('dragstart', handleDragStart);
-		cell.addEventListener('dragend', handleDragEnd);
 		playerTileGrid.appendChild(cell);
 	}
 

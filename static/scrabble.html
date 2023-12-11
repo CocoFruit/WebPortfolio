@@ -5,7 +5,123 @@
     <title>Scrabble</title>
     <link rel="stylesheet" href="styles/scrabble_style.css">
     <link href='https://fonts.googleapis.com/css?family=Varela Round' rel='stylesheet'>
+    <style>
+        body{
+    background-color: #ddd;
+}
+h1{
+    text-align: center;
+    font-family: 'Varela Round';
+    margin: 10px 10px;
+}
+.container {
+    display: flex; /* Use flexbox to center the grid */
+    justify-content: center; /* Horizontally center the grid */
+    align-items: center; /* Vertically center the grid */
+  }
+.grid {
+    display: grid;
+    grid-template-columns: repeat(15, 26px);
+    grid-gap: 4px;
+    border-radius: 1%;
+  }
+.cell {
+    width: 26px;
+    height: 26px;
+    background-color: #bbb;
+    display: flex; /* Use flexbox to center content */
+    justify-content: center; /* Horizontally center content */
+    align-items: center; /* Vertically center content */
+    border-radius: 20%;
+    font-family: 'Varela Round';
+    font-size: 12px;
+    font-weight: bold;
+    color: #fff;
+  }
+.cell.over{
+    background-color: #504646;
+}
 
+.letter {
+    box-shadow: inset 0 0 10px 1px #a4824a;
+    background-color: #FFDA9E;
+    color: #000;
+    font-family: 'Varela Round';
+    font-size: 20px;
+    text-shadow: white 0px 1px;
+  }
+.big_letter{
+    box-shadow: inset 0 0 10px 1px #a4824a;
+    background-color: #FFDA9E;
+    color: #000;
+    font-family: 'Varela Round';
+    font-size: 30px;
+    text-shadow: white 0px 1px;
+}
+.W3{
+    background-color: #EE157A;
+}
+.W2{
+    background-color: #FF8C72;
+}
+.L3{
+    background-color: #0B79B3;
+}
+.L2{
+    background-color: #68A2C3;
+}
+.start{
+    background-color: #FFD700;
+}
+
+.playerTileGrid{
+    display: grid;
+    grid-template-columns: repeat(7, 52px);
+    grid-gap: 20px;
+    border-radius: 1%;
+    margin-top: 5px;
+}
+.playerCell{
+    width: 50px;
+    height: 50px;
+    background-color: #FFDA9E;
+    display: flex; /* Use flexbox to center content */
+    justify-content: center; /* Horizontally center content */
+    align-items: center; /* Vertically center content */
+    border-radius: 20%;
+    font-family: 'Varela Round';
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.playerCell.selected {
+    border: 2px solid red; /* Add your desired highlighting style */
+}
+.coolButton {
+    background-color: #4CAF50; /* Green background color */
+    border: none; /* Remove border */
+    color: white; /* White text color */
+    padding: 15px 32px; /* Add some padding for better appearance */
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 10px 0;
+    cursor: pointer;
+    border-radius: 8px; /* Add rounded corners */
+    transition: background-color 0.3s; /* Add a smooth transition effect */
+}
+
+.coolButton:hover {
+    background-color: #45a049; /* Darker green color on hover */
+}
+.button-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+    </style>
 </head>
 <body onload="setup()">
 <h1>Scrabble!</h1>
@@ -14,6 +130,9 @@
 </div>
 <div class="container">
 <div class="playerTileGrid" id="playerTiles"></div>
+</div>
+<div class="button-container">
+<button class="coolButton" id="submitWord" onclick="submitWord()">Submit Word</button>
 </div>
 <script src="scripts/scrabble.js"></script>
 </body>
