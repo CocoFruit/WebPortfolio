@@ -13,13 +13,29 @@
             font-family: 'Varela Round';
             margin: 10px 10px;
         }
+        h2{
+            text-align: center;
+            font-family: 'Varela Round';
+            font-size: 20px;
+            font-weight: normal;
+            margin-top: 20px;
+        }
+        .currentContainer{
+            width: 100%;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+
+        }
         .board {
             display: grid;
             grid-template-columns: repeat(4, 75px);
             grid-gap: 15px;
             border-radius: 1%;
             user-select: none;
-            padding-top: 100px;
+            padding-top: 40px;
         }
         .cell {
             width: 75px;
@@ -42,7 +58,17 @@
             align-items: center;
             flex-direction: column;
         }
-
+        .login-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 10px;
+            background-color: #3498db;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
 
         #wordCounter {
             padding-top: 30px;
@@ -51,17 +77,113 @@
             max-width: 300px;
             font-family: 'Varela Round';
         }
+        p{
+            font-family: 'Varela Round';
+            font-size: 20px;
+            font-weight: normal;
+            margin-top: 20px;
+        }
+        label{
+            font-family: 'Varela Round';
+            font-size: 20px;
+            font-weight: normal;
+            margin-top: 10px;
+        }
+        .colorButton{
+            font-family: 'Varela Round';
+            font-size: 20px;
+            font-weight: normal;
+            background-color: #3498db;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            border-width: 1px;
+            cursor: pointer;
+        }
+    .toast {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #333;
+        color: #fff;
+        padding: 10px 20px;
+        border-radius: 5px;
+        display: none;
+    }
 
-        
+    .success {
+        background-color: #28a745;
+    }
+
+    .error {
+        background-color: #dc3545;
+    }
     </style>
+
 </head>
 <body>
     <div class="container">
+        {% if "sub" in session %}
+            <p>Hello {{ session['given_name'] }}!</p>
+            <a href="/logout" class="login-button">Logout</a>
+        {% else %}
+            <a href="/login" class="login-button">Login</a>
+        {% endif %}
+
         <h1>Boggle</h1>
+        <div class="currentContainer"><h2 id="CurrentWord"></h2></div>
         <div class="board" id="boggleBoard"></div>
         <div id="wordCounter">Words Found: 0</div>
     </div>
+    {% if "sub" in session %}
 
+        <form id="colorForm">
+            <label for="backgroundColor">Choose Background Color:</label>
+            <input type="color" id="backgroundColor" name="backgroundColor">
+            <button class="colorButton" type="button" onclick="updateBackgroundColor()">Save Color</button>
+        </form>
+        <script>
+            // get lastColor when the page loads
+            window.onload = getLastColor();
+
+            function getLastColor() {
+                
+                fetch('/get-color')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.body.style.backgroundColor = data['color'];
+                    } else {
+                        alert('Error getting background color');
+                    }
+                })
+                .catch(error => {
+                    alert('Error during fetch');
+                });
+
+            }
+            
+            function updateBackgroundColor() {
+            const color = document.getElementById('backgroundColor').value;
+
+            fetch('/update-color?color=' + encodeURIComponent(color))
+                .then(response => response.json())
+                .then(data => {
+                    if(data.success){
+                        document.body.style.backgroundColor = color;
+                    } else {
+                        alert('Error updating background color');
+                    }
+                })
+                .catch(error => {
+                    console.error('Fetch error:', error);
+                    alert('Error during fetch');
+                });
+        }
+        </script>
+    {% endif %}
+    <div id="toast" class="toast"></div>
 </body>
 <script>
     // create the board when the page loads
@@ -91,7 +213,7 @@
     let validWords = [];  // Array to store valid words
 
     // Load the boggleDict.txt file
-    fetch('/static/boggleDict.txt')
+    fetch('static/boggleDict.txt')
         .then(response => response.text())
         .then(data => {
             // Split the content into an array of words
@@ -119,32 +241,62 @@
     function sleep (time) {
         return new Promise((resolve) => setTimeout(resolve, time));
     }
-
     
     function validateCurrentWord() {
         const word = currentWord.map(entry => entry[0]).join('');
         if (isValidWord(word) && !foundWords.includes(word)) {
-            alert(`Valid word: ${word}`);
-            if(!foundWords.includes(word)){
-                foundWords.push(word);
-                document.getElementById("wordCounter").innerHTML = "Words Found: " + foundWords.length;
-            }
+            foundWords.push(word);
+            document.getElementById("wordCounter").innerHTML = "Words Found: " + foundWords.length;
+            return true;
         } else {
-            alert(`Invalid word: ${word}`);
+            return false;
         }
+    }    
+    function showToast(message, type) {
+        const toast = document.getElementById("toast");
+        toast.className = `toast ${type}`;
+        toast.innerHTML = message;
+        toast.style.display = "block";
+
+        setTimeout(() => {
+            toast.style.display = "none";
+        }, 420); // Toast will disappear after 3 seconds
     }
 
     function validateAndReset() {
-        validateCurrentWord();
-        for (var i = 0; i < currentWord.length; i++) {
-            coord = currentWord[i];
-            x = coord[1];
-            y = coord[2];
-            document.getElementById(x + "," + y).style.backgroundColor = "#bbb";
-        }
-        currentWord = [];
-    }
+        let isValid = validateCurrentWord();
 
+        for (let i = 0; i < currentWord.length; i++) {
+            const coord = currentWord[i];
+            const x = coord[1];
+            const y = coord[2];
+
+            if (isValid) {
+                document.getElementById(x + "," + y).style.backgroundColor = "#00FF00";
+            } else {
+                document.getElementById(x + "," + y).style.backgroundColor = "#FF0000";
+            }
+        }
+        if (isValid) {
+                showToast("Word Found!", "success");
+            } else {
+                showToast("Not a valid word or already found!", "error");
+            }
+        sleep(420).then(() => {
+            for (let j = 0; j < currentWord.length; j++) {
+                const coord = currentWord[j];
+                const x = coord[1];
+                const y = coord[2];
+                document.getElementById(x + "," + y).style.backgroundColor = "#bbb";
+            }
+            currentWord = [];
+
+        });
+    }
+    function updateCurrentWord() {
+        const word = currentWord.map(entry => entry[0]).join('');
+        document.getElementById("CurrentWord").innerHTML = word;
+    }
     function randomizeBoard(diceList = LETTERS) {
         const diceIndices = Array.from({ length: diceList.length }, (_, i) => i);
         shuffleArray(diceIndices);
@@ -170,7 +322,6 @@
         }
     }
 
-
     function createBoard() {
         var board = document.getElementById("boggleBoard");
         var boardSize = 4;
@@ -189,6 +340,7 @@
         
     document.addEventListener("mousemove", function (event) {
         if (isDragging) {
+            updateCurrentWord();
             const element = document.elementFromPoint(event.clientX, event.clientY);
             if (element && element.className === "cell") {
                 const coord = element.id.split(",");
@@ -214,18 +366,16 @@
 
                     if (Math.abs(x - lastX) <= 1 && Math.abs(y - lastY) <= 1) {
                         currentWord.push([element.innerHTML, x, y]);
-                        element.style.backgroundColor = "#00FF00";
+                        element.style.backgroundColor = "#333311";
                     }
                 } else {
                     currentWord.push([element.innerHTML, x, y]);
-                    element.style.backgroundColor = "#00FF00";
+                    element.style.backgroundColor = "#333311";
                 }
             }
         }
     });
     }
-
-
-
 </script>
+
 </html>

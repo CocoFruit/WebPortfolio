@@ -4,6 +4,18 @@ import random
 from flask import Flask, jsonify, render_template, request, redirect, url_for
 import firebase_admin
 from firebase_admin import credentials, firestore
+import os
+import pathlib
+import requests
+from flask import *
+from google.oauth2 import id_token
+from google_auth_oauthlib.flow import Flow
+import google.auth.transport.requests
+import time
+import collections
+import re
+import json
+from pip._vendor import cachecontrol
 
 app = Flask(__name__)
 app.secret_key = 'key'
@@ -12,6 +24,60 @@ app.secret_key = 'key'
 cred = credentials.Certificate(r"C:\Users\parke\Downloads\vote_example\vote_example\creds.json")  # Replace with the path to your Firebase Admin SDK key
 firebase_admin.initialize_app(cred)
 db = firestore.client()
+
+# Google OAuth setup
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+GOOGLE_CLIENT_ID = "329078169830-850binjjp8lfihtlicvdk1f4rih2fk94.apps.googleusercontent.com"  
+flow = Flow.from_client_secrets_file(  
+	client_secrets_file="oath.json",
+	scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],  
+	redirect_uri="http://localhost:80/callback" #FIX THIS WHEN YOU DEPLOY
+	)
+
+def login_is_required(function):  #a function to check if the user is authorized or not
+    def wrapper(*args, **kwargs):
+        if "sub" not in session:  #authorization required
+            return redirect("/")
+        else:
+            return function()
+
+    return wrapper
+
+@app.route("/login")  #the page where the user can login
+def login():
+    authorization_url, state = flow.authorization_url()  #asking the flow class for the authorization (login) url
+    session["state"] = state
+    return redirect(authorization_url)
+
+@app.route("/logout")  #the page where the user can login
+def logout():
+    session.clear()
+    return redirect("/")
+
+@app.route("/callback")  #this is the page that will handle the callback process meaning process after the authorization
+def callback():
+    flow.fetch_token(authorization_response=request.url)
+
+    if not session["state"] == request.args["state"]:
+        abort(500)  #state does not match!
+
+    credentials = flow.credentials
+    request_session = requests.session()
+    cached_session = cachecontrol.CacheControl(request_session)
+    token_request = google.auth.transport.requests.Request(session=cached_session)
+
+    id_info = id_token.verify_oauth2_token(
+        id_token=credentials._id_token,
+        request=token_request,
+        audience=GOOGLE_CLIENT_ID
+    )
+    print(id_info)
+    # ~ {'iss': 'https://accounts.google.com', 'azp': '55803751818-j3nlbc4p9sau2pnmutubvemldst17slj.apps.googleusercontent.com', 'aud': '55803751818-j3nlbc4p9sau2pnmutubvemldst17slj.apps.googleusercontent.com', 'sub': '104209901845806192943', 'email': 'nicholas.seward@gmail.com', 'email_verified': True, 'at_hash': 'Sb0E7UAmDNVDZFo3Z4wZjg', 'name': 'Nicholas Seward', 'picture': 'https://lh3.googleusercontent.com/a-/AFdZucrtpIlkBU61T_kDCPc9eYFaVcbub79F8P18N9crgQ=s96-c', 'given_name': 'Nicholas', 'family_name': 'Seward', 'locale': 'en', 'iat': 1661021411, 'exp': 1661025011}
+    # ~ session["photos"]=[]
+    # ~ session["class"]=getClass(id_info.get("email"))
+    session.update(id_info)
+    
+    return redirect("/boggle")
 
 @app.route('/')
 def index():
@@ -156,7 +222,42 @@ def weather():
 
 @app.route('/boggle')
 def boggle():
-    return send_from_directory('static','boggle.html')
+    return render_template('boggle.html', **session)
+
+
+@app.route('/update-color', methods=['GET','POST'])
+def update_color():
+    print("here")
+    for item in request.args:
+        print(request.args[item])
+        if item == "color":
+            color = request.args[item]
+            db.collection('users').document(session["sub"]).set({
+                'color': color
+            })
+            return jsonify({session['sub']: color,"success":True})
+    
+    return jsonify({session['sub']: ""})
+    # # send to database as sub:color:color
+    # data = request.get_json()
+    # color = data.get('color')
+    
+    # # Update the color in the database
+    # db.collection('users').document(session["sub"]).set({
+    #     'color': color
+    # })
+    
+    # return jsonify({session['sub']: color})
+
+@app.route('/get-color', methods=['GET','POST'])
+def get_color():
+    # send to database as sub:color:color
+    # see if the user has a color
+    if db.collection('users').document(session["sub"]).get().exists:
+        color = db.collection('users').document(session["sub"]).get().to_dict()["color"]
+        return jsonify({"color": color,"success":True})
+    else:
+        return jsonify({"color": 'black'})
 
 if __name__=="__main__":
     app.run(host='0.0.0.0',port=80)
