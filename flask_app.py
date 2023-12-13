@@ -229,10 +229,44 @@ def hsh():
 def hshlogin():
     return send_from_directory('static','hshlogin.html')
 
+@app.route('/hshgetuser', methods=['GET'])
+def hshgetuser():
+    if db.collection('spaceship').document(session["sub"]).get().exists:
+        spaceship = db.collection('spaceship').document(session["sub"]).get().to_dict()
+        return jsonify(spaceship)
+    else:
+        # set default spaceship
+        db.collection('spaceship').document(session["sub"]).set({
+            'activated': '[0,0,0]'
+        })
+        return jsonify({'activated': '[0,0,0]'})
+    
+@app.route('/hshset', methods=['GET'])
+def hshset():
+    if "activated" in request.args:
+        activated = request.args["activated"]
+        db.collection('spaceship').document(session["sub"]).set({
+            'activated': activated
+        })
+        return jsonify({'activated': activated})
+    return jsonify({'activated': '[0,0,0]'})
+
+@app.route('/hshgetflag', methods=['GET'])
+def hshgetflag():
+    # if user activated == [1,1,1] return flag
+    if db.collection('spaceship').document(session["sub"]).get().exists:
+        spaceship = db.collection('spaceship').document(session["sub"]).get().to_dict()
+        print(spaceship["activated"])
+        if spaceship["activated"] == "[0,0,1]" or spaceship["activated"] == "[0,1,1]" or spaceship["activated"] == "[1,0,1]":
+            return jsonify({'flag': 'flag{hsh_1s_c00l}'})
+        else:
+            return jsonify({'flag': 'not yet'})
+    else:
+        return jsonify({'flag': 'not yet'})
+
 @app.route('/boggle')
 def boggle():
     return render_template('boggle.html', **session)
-
 
 @app.route('/update-color', methods=['GET','POST'])
 def update_color():

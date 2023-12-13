@@ -207,6 +207,63 @@
             });
         });
 
+        function getButtonStates(){
+            fetch('/hshgetuser')
+            .then(response => response.json())
+            .then(data => {
+                // comes out at [0,0,0] which is [reactor, thrusters, launch]
+                let activated = data['activated'];
+                // split by commas
+                activated = activated.split(',');
+                // remove brackets
+                activated[0] = activated[0].replace('[', '');
+                activated[2] = activated[2].replace(']', '');
+                // convert to int
+                activated[0] = parseInt(activated[0]);
+                activated[1] = parseInt(activated[1]);
+                activated[2] = parseInt(activated[2]);
+                console.log(activated);
+                // set button states
+                if(activated[0] == 1){
+                    const reactor_button = document.getElementById("reactor_button");
+                    reactor_button.classList.remove("inactive");
+                    reactor_button.classList.add("active");
+                }
+                if(activated[1] == 1){
+                    const thrusters_button = document.getElementById("thrusters_button");
+                    thrusters_button.classList.remove("inactive");
+                    thrusters_button.classList.add("active");
+                }
+                if(activated[2] == 1){
+                    const launch_button = document.getElementById("launch_button");
+                    launch_button.classList.remove("inactive");
+                    launch_button.classList.add("active");
+                }
+            });
+        }
+
+        function updateDataBase(){
+            fetch("/hshset?activated=["+[reactor_state, thrusters_state, launch_state]+"]")
+            .then(response => response.json())
+            .then(data => {
+                if(data.success){
+                    console.log("success");
+                }
+            });
+            getFlag();
+        }
+
+        function getFlag(){
+            fetch('/hshgetflag')
+            .then(response => response.json())
+            .then(data => {
+                if (data['flag'] != "not yet"){
+                    write("You Crashed the Ship! Here is your flag: ");
+                    write(data['flag']);
+                }                
+            });
+        }
+
         function write(text) {
             screen.value += `\n${text}`;
             scrollToBottom();
@@ -228,6 +285,7 @@
                 write("Alert: Reactor turned off");
                 reactor_state = 0;
             }
+            updateDataBase();
         }
 
         function thrusters() {
@@ -245,6 +303,8 @@
                 write("Alert: Thrusters turned off");
                 thrusters_state = 0;
             }
+            updateDataBase();
+
         }
 
         function launch() {
@@ -257,6 +317,7 @@
             } else if (thrusters_state == 0) {
                 write("Error: Cannot launch while thrusters are off");
             }
+            updateDataBase();
         }
     </script>
 </body>
