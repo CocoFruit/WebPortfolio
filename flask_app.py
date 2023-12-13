@@ -21,7 +21,7 @@ app = Flask(__name__)
 app.secret_key = 'key'
 
 # Firebase setup
-cred = credentials.Certificate(r"C:\Users\parke\Downloads\vote_example\vote_example\creds.json")  # Replace with the path to your Firebase Admin SDK key
+cred = credentials.Certificate(r"C:\Users\parke\Downloads\vote_example\vote_example\creds.json") # /home/ArkerPay/mysite/creds.json
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 
@@ -29,15 +29,15 @@ db = firestore.client()
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 GOOGLE_CLIENT_ID = "329078169830-850binjjp8lfihtlicvdk1f4rih2fk94.apps.googleusercontent.com"  
 flow = Flow.from_client_secrets_file(  
-	client_secrets_file="oath.json",
+	client_secrets_file=".gitignore/oath.json", # /home/ArkerPay/mysite/.gitignore/oath.json
 	scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],  
-	redirect_uri="http://localhost:80/callback" #FIX THIS WHEN YOU DEPLOY
+	redirect_uri="http://localhost:80/callback" #FIX THIS WHEN YOU DEPLOY # https://arkerpay.pythonanywhere.com/callback
 	)
 
 def login_is_required(function):  #a function to check if the user is authorized or not
     def wrapper(*args, **kwargs):
         if "sub" not in session:  #authorization required
-            return redirect("/")
+            return redirect("/hshlogin")
         else:
             return function()
 
@@ -77,7 +77,7 @@ def callback():
     # ~ session["class"]=getClass(id_info.get("email"))
     session.update(id_info)
     
-    return redirect("/boggle")
+    return redirect("/hsh")
 
 @app.route('/')
 def index():
@@ -219,6 +219,15 @@ def todo():
 @app.route('/weather')
 def weather():
     return send_from_directory('static','weather.html')
+
+@app.route('/hsh')
+@login_is_required
+def hsh():
+    return render_template('hsh.html', **session)
+
+@app.route('/hshlogin')
+def hshlogin():
+    return send_from_directory('static','hshlogin.html')
 
 @app.route('/boggle')
 def boggle():
